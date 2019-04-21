@@ -3,6 +3,21 @@
 #include <cstdint>
 #include <random>
 
+struct VRGBA {
+public:
+	VRGBA()
+	{
+		R = 1.0f;
+		G = 1.0f;
+		B = 1.0f;
+		A = 1.0f;		
+	}
+	float R;
+	float G;
+	float B;
+	float A;
+};
+
 struct Vector3 {
 	float X;
 	float Y;
@@ -228,8 +243,8 @@ public:
 	char pad_0000[16]; //0x0000
 	float ArmorGlowR; //0x0010
 	float ArmorGlowG; //0x0014
-	float ArmowGlowB; //0x0018
-	float ArmowAlpha; //0x001C
+	float ArmorGlowB; //0x0018
+	float ArmorAlpha; //0x001C
 	float N000005AC; //0x0020
 	float N000005AD; //0x0024
 	float N000005AE; //0x0028
