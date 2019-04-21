@@ -617,7 +617,7 @@ public:
 	virtual void Function156();
 	virtual void Function157();
 	virtual void Function158();
-	virtual void CameraPosition();
+	virtual void SomethingCameraPosition();
 	virtual void Function160();
 	virtual void Function161();
 	virtual void Function162();
