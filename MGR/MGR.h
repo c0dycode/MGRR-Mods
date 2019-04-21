@@ -3,6 +3,12 @@
 #include <cstdint>
 #include <random>
 
+struct Vector3 {
+	float X;
+	float Y;
+	float Z;
+};
+
 struct Vector4 {
 	float X;
 	float Y;
@@ -401,60 +407,56 @@ enum EPTenThousandVTable {
 class PTenThousand
 {
 public:
-	char pad_0004[12]; //0x0004
-	float N000002B2; //0x0010
-	char pad_0014[4]; //0x0014
-	float N000002B4; //0x0018
-	char pad_001C[8]; //0x001C
-	float N000002B7; //0x0024
-	char pad_0028[8]; //0x0028
-	float N000002BA; //0x0030
-	char pad_0034[4]; //0x0034
-	float N000002BC; //0x0038
-	char pad_003C[4]; //0x003C
-	Vector4 N000002BE; //0x0040
+	char pad_0004[60]; //0x0004
+	Vector3 CameraPosition; //0x0040
+	char pad_004C[4]; //0x004C
 	Vector4 PlayerPosition; //0x0050
 	char pad_0060[16]; //0x0060
 	float ModelWidth; //0x0070
 	float ModelHeight; //0x0074
 	float ModelLength; //0x0078
-	char pad_007C[52]; //0x007C
-	float N000002D5; //0x00B0
-	char pad_00B4[16]; //0x00B4
-	float N000002DA; //0x00C4
-	char pad_00C8[16]; //0x00C8
-	float N000002DF; //0x00D8
-	char pad_00DC[16]; //0x00DC
-	float N000002E4; //0x00EC
-	float N000002E5; //0x00F0
-	char pad_00F4[16]; //0x00F4
-	float N000002EA; //0x0104
-	char pad_0108[16]; //0x0108
-	float N000002EF; //0x0118
-	char pad_011C[16]; //0x011C
-	float N000002F4; //0x012C
-	char pad_0130[12]; //0x0130
-	float N000002F8; //0x013C
-	char pad_0140[236]; //0x0140
-	float N00000303; //0x022C
-	char pad_0230[12]; //0x0230
-	uint16_t N00000307; //0x023C
-	uint16_t N00000536; //0x023E
-	char pad_0240[192]; //0x0240
+	char pad_007C[644]; //0x007C
 	class N00000581* N00000338; //0x0300
 	char pad_0304[28]; //0x0304
 	class cMesh* ArmorMeshes; //0x0320
-	char pad_0324[48]; //0x0324
+	char pad_0324[28]; //0x0324
+	uint32_t N00000348; //0x0340
+	char pad_0344[16]; //0x0344
 	class RaidenParts* RaidenPartCollection; //0x0354
-	char pad_0358[1020]; //0x0358
+	char pad_0358[316]; //0x0358
+	void* AnalyzeThis; //0x0494
+	char pad_0498[76]; //0x0498
+	uint32_t OneEqualsCameraStuck; //0x04E4
+	char pad_04E8[8]; //0x04E8
+	class N0000439F* SomethingMustBeWithThis; //0x04F0
+	char pad_04F4[156]; //0x04F4
+	uint32_t N000003D9; //0x0590
+	char pad_0594[132]; //0x0594
+	uint32_t LastAction; //0x0618
+	uint32_t N000003F8; //0x061C
+	char pad_0620[308]; //0x0620
 	class N00000F7B* BattleParamter; //0x0754
-	char pad_0758[280]; //0x0758
+	char pad_0758[120]; //0x0758
+	class N00001333* StateMachineContext; //0x07D0
+	char pad_07D4[156]; //0x07D4
 	uint32_t CurrentHP; //0x0870
 	uint32_t BaseHP; //0x0874
-	char pad_0878[6944]; //0x0878
+	char pad_0878[124]; //0x0878
+	float N000004B1; //0x08F4
+	char pad_08F8[2824]; //0x08F8
+	uint32_t HidePrimaryWeapon; //0x1400
+	char pad_1404[3988]; //0x1404
 	class N00001A91* SomeArray; //0x2398
 	uint32_t SomeArrayCount; //0x239C
-	char pad_23A0[20]; //0x23A0
+	char pad_23A0[5312]; //0x23A0
+	uint32_t CanNotSprint; //0x3860
+	char pad_3864[2152]; //0x3864
+	uint32_t bIsSprinting; //0x40CC
+	char pad_40D0[4016]; //0x40D0
+	uint32_t bCanSprint; //0x5080
+	char pad_5084[872]; //0x5084
+	uint32_t N00002197; //0x53EC
+	char pad_53F0[1284]; //0x53F0
 
 	virtual void Function0();
 	virtual void Function1();
@@ -471,8 +473,8 @@ public:
 	virtual void Function12();
 	virtual void Function13();
 	virtual void Function14();
-	virtual void Function15();
-	virtual void Function16();
+	virtual void AccessesSomeStaticArray();
+	virtual void BigFuncLotsOfFloats();
 	virtual void Function17();
 	virtual void Function18();
 	virtual void Function19();
@@ -501,7 +503,7 @@ public:
 	virtual void Function42();
 	virtual void Function43();
 	virtual void Function44();
-	virtual void Function45();
+	virtual void SomethingWithPlayerPosition();
 	virtual void Function46();
 	virtual void Function47();
 	virtual void Function48();
@@ -615,7 +617,7 @@ public:
 	virtual void Function156();
 	virtual void Function157();
 	virtual void Function158();
-	virtual void Function159();
+	virtual void CameraPosition();
 	virtual void Function160();
 	virtual void Function161();
 	virtual void Function162();
@@ -652,7 +654,7 @@ public:
 	virtual void Function193();
 	virtual void Function194();
 	virtual void TakeDamage();
-	virtual void Function196();
+	virtual void IncreaseHP();
 	virtual void Function197();
 	virtual void Function198();
 	virtual void Function199();
@@ -668,10 +670,10 @@ public:
 	virtual void Function209();
 	virtual void Function210();
 	virtual void Function211();
-	virtual void Function212();
-	virtual void Function213();
+	virtual void SomethingWhenFalling();
+	virtual void Stunned();
 	virtual void Function214();
-	virtual void Function215();
+	virtual void KnockDown();
 	virtual void Function216();
 	virtual void Function217();
 	virtual void Function218();
@@ -679,9 +681,9 @@ public:
 	virtual void Function220();
 	virtual void Function221();
 	virtual void Function222();
-	virtual void Function223();
+	virtual void IsCharacterDead();
 	virtual void Function224();
-	virtual void Function225();
+	virtual void ShowPrimaryWeapon();
 	virtual void Function226();
 	virtual void Function227();
 	virtual void Function228();
@@ -710,7 +712,8 @@ public:
 	virtual void Function251();
 	virtual void Function252();
 	virtual void Function253();
-}; //Size: 0x23B4
+}; //Size: 0x58F4
+
 
 
 class N00000E41
