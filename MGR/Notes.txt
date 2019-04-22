@@ -1,0 +1,55 @@
+Outdated at this point. Still keeping them around for now
+
+ArmorMeshes
+2F638620
+
+SkyBox
+2F836990 = + 001FE370
+
+BackgroundEnvironment
+2F837AD0 = + 001FF4B0
+
+SheethHolder
+2F844290 = + 0020BC70
+
+RaidenHair
+2F867050 = + 0022EA30
+
+RaidenTopHair
+2F8670C0 = + 0022EAA0
+
+RaidenHeadShieldRight
+2F8749D0 = + 0023C3B0
+
+RaidenHeadShieldLeft
+2F874A40 = + 0023C420
+
+RaidenHeadShieldLight
+2F874AB0 = + 0023C490
+
+SwordSheeth
+2F878C50 = + 00240630
+
+MainWeaponGrip
+2F87CB00 = + 002444E0
+
+RaidenHeadRightSide
+2F889770 = + 00251150
+
+RaidenHeadLeftSide
+2F8897E0 = + 002511C0
+
+RaidenFaceRightSide
+2F889850 = + 00251230
+
+RaidenFaceLeftSide
+2F8898C0 = + 002512A0
+
+RaidenEyesJawBandana
+2F889930 = + 00251310
+
+RaidenEyeLids
+2F889A10 = + 002513F0
+
+Minimap
+2FA5E150 = + 00425B30
