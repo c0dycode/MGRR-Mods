@@ -57,9 +57,9 @@ typedef HRESULT(__stdcall * f_PresentFn)(RECT* pSourceRect, CONST RECT* pDestRec
 f_PresentFn oPresentFunction;
 #endif
 
-static IDirect3DDevice9 *device								= nullptr;
+static IDirect3DDevice9 *dxd3d9device						= nullptr;
 static IDirect3DDevice9Ex *deviceEx							= nullptr;
-static D3DPRESENT_PARAMETERS present						= {0};
+static D3DPRESENT_PARAMETERS dxd3d9present					= {0};
 static D3DDEVICE_CREATION_PARAMETERS d3dcreationParameters	= {0};
 static void * d3d9Device[119];
 LPDIRECT3D9 d3d;
@@ -380,18 +380,18 @@ void create_d3d9_device(HWND wnd)
 {
 	HRESULT hr;
 
-	present.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
-	present.BackBufferWidth = WINDOW_WIDTH;
-	present.BackBufferHeight = WINDOW_HEIGHT;
-	present.BackBufferFormat = D3DFMT_X8R8G8B8;
-	present.BackBufferCount = 1;
-	present.MultiSampleType = D3DMULTISAMPLE_NONE;
-	present.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	present.hDeviceWindow = wnd;
-	present.EnableAutoDepthStencil = TRUE;
-	present.AutoDepthStencilFormat = D3DFMT_D24S8;
-	present.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
-	present.Windowed = TRUE;
+	dxd3d9present.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+	dxd3d9present.BackBufferWidth = WINDOW_WIDTH;
+	dxd3d9present.BackBufferHeight = WINDOW_HEIGHT;
+	dxd3d9present.BackBufferFormat = D3DFMT_X8R8G8B8;
+	dxd3d9present.BackBufferCount = 1;
+	dxd3d9present.MultiSampleType = D3DMULTISAMPLE_NONE;
+	dxd3d9present.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	dxd3d9present.hDeviceWindow = wnd;
+	dxd3d9present.EnableAutoDepthStencil = TRUE;
+	dxd3d9present.AutoDepthStencilFormat = D3DFMT_D24S8;
+	dxd3d9present.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
+	dxd3d9present.Windowed = TRUE;
 
 	{/* first try to create Direct3D9Ex device if possible (on Windows 7+) */
 		typedef HRESULT WINAPI Direct3DCreate9ExPtr(UINT, IDirect3D9Ex**);
@@ -401,10 +401,10 @@ void create_d3d9_device(HWND wnd)
 			if (SUCCEEDED(Direct3DCreate9Ex(D3D_SDK_VERSION, &d3d9ex))) {
 				hr = IDirect3D9Ex_CreateDeviceEx(d3d9ex, D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, wnd,
 					D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE,
-					&present, NULL, &deviceEx);
+					&dxd3d9present, NULL, &deviceEx);
 				if (SUCCEEDED(hr)) {
-					device = (IDirect3DDevice9 *)deviceEx;
-					memcpy(d3d9Device, *reinterpret_cast<void***>(device), sizeof(d3d9Device));
+					dxd3d9device = (IDirect3DDevice9 *)deviceEx;
+					memcpy(d3d9Device, *reinterpret_cast<void***>(dxd3d9device), sizeof(d3d9Device));
 					OutputDebugStringA("Successfully received D3DDevice via Direct3DCreate9Ex!");
 				}
 				else {
@@ -412,10 +412,10 @@ void create_d3d9_device(HWND wnd)
 					retry with software vertex processing */
 					hr = IDirect3D9Ex_CreateDeviceEx(d3d9ex, D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, wnd,
 						D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE,
-						&present, NULL, &deviceEx);
+						&dxd3d9present, NULL, &deviceEx);
 					if (SUCCEEDED(hr)) {
-						device = (IDirect3DDevice9 *)deviceEx;
-						memcpy(d3d9Device, *reinterpret_cast<void***>(device), sizeof(d3d9Device));
+						dxd3d9device = (IDirect3DDevice9 *)deviceEx;
+						memcpy(d3d9Device, *reinterpret_cast<void***>(dxd3d9device), sizeof(d3d9Device));
 						OutputDebugStringA("Successfully received D3DDevice via Direct3DCreate9Ex!");
 					}
 				}
@@ -424,23 +424,23 @@ void create_d3d9_device(HWND wnd)
 		}
 	}
 
-	if (!device) {
+	if (!dxd3d9device) {
 		/* otherwise do regular D3D9 setup */
 		IDirect3D9 *d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
 
 		hr = IDirect3D9_CreateDevice(d3d9, D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, wnd,
 			D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE,
-			&present, &device);
+			&dxd3d9present, &dxd3d9device);
 		if (FAILED(hr)) {
 			/* hardware vertex processing not supported, no big deal
 			retry with software vertex processing */
 			hr = IDirect3D9_CreateDevice(d3d9, D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, wnd,
 				D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE,
-				&present, &device);
+				&dxd3d9present, &dxd3d9device);
 			NK_ASSERT(SUCCEEDED(hr));
-			if (device != nullptr)
+			if (dxd3d9device != nullptr)
 			{
-				memcpy(d3d9Device, *reinterpret_cast<void***>(device), sizeof(d3d9Device));
+				memcpy(d3d9Device, *reinterpret_cast<void***>(dxd3d9device), sizeof(d3d9Device));
 				OutputDebugStringA("Successfully received D3DDevice!");
 			}
 				
@@ -451,7 +451,7 @@ void create_d3d9_device(HWND wnd)
 
 void GetD3D9Addresses()
 {
-	while (device == NULL) {
+	while (dxd3d9device == NULL) {
 		create_d3d9_device(GetForegroundWindow());
 	}
 	////Do this in a function or whatever
@@ -497,7 +497,7 @@ void GetD3D9Addresses()
 	//	//printf ("WARNING: D3D FAILED");
 	//	return false;
 	//}
-	auto pInterface = (unsigned long*)*((unsigned long*)device);
+	auto pInterface = (unsigned long*)*((unsigned long*)dxd3d9device);
 
 	oPresentFunction = (f_PresentFn)(DWORD)pInterface[PresentIndex];
 	oResetFunction = (f_resetFn)(DWORD)pInterface[ResetIndex];
@@ -560,8 +560,7 @@ namespace MyD3D9 {
 	MH_ApplyQueued();
 	
 	*/
-
-	void * d3d9Device[119];
+	void* d3d9Device[119];
 	bool GetD3D9Device()
 	{
 		if (!d3d9Device)
@@ -584,6 +583,8 @@ namespace MyD3D9 {
 		}
 
 		memcpy(d3d9Device, *reinterpret_cast<void***>(pDummyDevice), sizeof(d3d9Device));
+		dxd3d9device = pDummyDevice;
+		dxd3d9present = d3dpp;
 
 		pDummyDevice->Release();
 		pD3D->Release();
