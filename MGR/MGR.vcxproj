@@ -130,6 +130,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>if $(Configuration) == Release mkdir $(SolutionDir)Release\Plugins
+if $(Configuration) == Release xcopy /Y $(SolutionDir)Release\$(TargetFileName) $(SolutionDir)Release\Plugins
+if $(Configuration) == Release 7z u -tzip -r -mx=9 $(SolutionDir)Package\Package.zip $(SolutionDir)Release\Plugins</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
