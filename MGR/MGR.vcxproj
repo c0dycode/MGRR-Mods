@@ -179,6 +179,9 @@ if $(Configuration) == Release 7z u -tzip -r -mx=9 $(SolutionDir)Package\Package
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="MGR.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Notes.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
