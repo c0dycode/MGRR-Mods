@@ -39,6 +39,9 @@
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="DetourHooking.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MGR.h">
@@ -71,5 +74,13 @@
     <ClInclude Include="Configs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DetourHooking.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Notes.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
