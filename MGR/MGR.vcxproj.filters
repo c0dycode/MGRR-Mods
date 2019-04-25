@@ -16,6 +16,12 @@
     <Filter Include="ImGui">
       <UniqueIdentifier>{f15c37a3-5fbe-4a0f-9762-104796ada871}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Overlay">
+      <UniqueIdentifier>{476b7e07-05d2-4f83-8d2f-2e9f8dabf406}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Overlay">
+      <UniqueIdentifier>{b42d6ee1-d37d-404f-bfff-19700bdb22d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -41,6 +47,18 @@
     </ClCompile>
     <ClCompile Include="DetourHooking.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Configs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MGR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay.cpp">
+      <Filter>Source Files\Overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay.h">
+      <Filter>Header Files\Overlay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DetourHooking.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVariables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
