@@ -3,6 +3,46 @@ cCameraGame, hkpWorld, hkLifoAllocator
 
 
 
+##############################################################
+Interesting Values
+
+Ripper Activation Slowdown Time
+00B851EC
+
+Camera Rotation Speed Modifier (Default 0.1f)
+00B851F8
+
+Brightness
+0163B7D4
+
+Contrast?
+0163B740
+
+Audio Hall Effect (Default 20.0f, less is more hall)
+0163CCD8
+
+Not Gravity? (Default 1.875f) But lets you float for a bit 
+0163E0C4
+^ similiar effect (Default 0.033)
+0163CF70 
+
+JumpSpeed? (Default 0.120)
+0163CFA0
+
+MinimapZoom? (Default 1.8f)
+0163D2C8
+
+RealGravity/Jump Height? (Default 0.03f)
+0163D2CC
+
+AirControl? (Default 0.0017453292);
+0163D824
+
+Jump Height can be modified in P10000-class at 0x920
+NOP out writes at 00B9945F, 00B9952D, 00BC6233, 00BBF8D8, 00BC58C3 or possible write the value over and over again?!
+##############################################################
+
+
 Outdated at this point. Still keeping them around for now
 
 ArmorMeshes
