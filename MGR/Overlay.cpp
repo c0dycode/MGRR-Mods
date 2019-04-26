@@ -1,8 +1,13 @@
 #include "Overlay.h"
+#include <mutex>
+
+static float fJumpHeightModifier = 0.03f;
 
 namespace Overlay {
 	static const char* selectedPreset = { 0 };
 	int iColorsChoice = 0;
+
+	std::mutex mtx;	
 
 	// Moved all the Overlay-controls related code in here
 	void OverlayLogic() {
@@ -143,12 +148,26 @@ namespace Overlay {
 		}
 		ImGui::Separator();
 
-		// Slider to adjust Camera Heigth
-		if (ImGui::SliderFloat("Camera Heigth", &fCameraHeigthOffset, 0.1f, 4.0f)) {
+		// Slider to adjust Camera Height
+		if (ImGui::SliderFloat("Camera Height", &fCameraHeigthOffset, 0.1f, 4.0f)) {
 			DWORD old;
 			VirtualProtect(*(float**)(BaseAddress + 0x6C0C7E + 2), 4, PAGE_READWRITE, &old);
 			**(float**)(BaseAddress + 0x6C0C7E + 2) = fCameraHeigthOffset;
 			VirtualProtect(*(float**)(BaseAddress + 0x6C0C7E + 2), 4, PAGE_READONLY, &old);
 		}
+
+		mtx.lock();
+		static bool bJumpHeightModified = false;
+		// Slider to adjust Jump Height
+		if (ImGui::SliderFloat("Jump Height", &fJumpHeightModifier, 0.03f, 0.3f)) {
+			if (!bJumpHeightModified) {
+				DWORD old;
+				VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, PAGE_READWRITE, &old);
+				*(float**)(BaseAddress + 0x7BF8D2 + 2) = &fJumpHeightModifier;
+				VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, old, &old);
+				bJumpHeightModified = true;
+			}
+		}
+		mtx.unlock();
 	}
 }
