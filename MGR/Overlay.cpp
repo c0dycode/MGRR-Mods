@@ -2,6 +2,7 @@
 #include <mutex>
 
 static float fJumpHeightModifier = 0.03f;
+static float fJumpSpeedModifier = 0.12f;
 
 namespace Overlay {
 	static const char* selectedPreset = { 0 };
@@ -166,6 +167,18 @@ namespace Overlay {
 				*(float**)(BaseAddress + 0x7BF8D2 + 2) = &fJumpHeightModifier;
 				VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, old, &old);
 				bJumpHeightModified = true;
+			}
+		}
+
+		static bool bJumpSpeedModified = false;
+		// Slider to adjust Jump Speed
+		if (ImGui::SliderFloat("Jump Speed", &fJumpSpeedModifier, 0.12f, 0.8f)) {
+			if (!bJumpSpeedModified) {
+				DWORD old;
+				VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, PAGE_READWRITE, &old);
+				*(float**)(BaseAddress + 0x7BFCEF + 2) = &fJumpSpeedModifier;
+				VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, old, &old);
+				bJumpSpeedModified = true;
 			}
 		}
 		mtx.unlock();
