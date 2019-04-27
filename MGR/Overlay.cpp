@@ -149,6 +149,10 @@ namespace Overlay {
 			if (!bJumpSpeedModified) {
 				DWORD old;
 				VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+				
+				// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
+				if (memcmp((LPVOID)(BaseAddress + 0x7BFC51), "\x74\x5F", 2) == 0)
+					memcpy((LPVOID)(BaseAddress + 0x7BFC51), "\xEB\x5F", 2);
 				*(float**)(BaseAddress + 0x7BFCEF + 2) = &fJumpSpeedModifier;
 				VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, old, &old);
 				bJumpSpeedModified = true;
@@ -203,7 +207,8 @@ namespace Overlay {
 			if (PManager && PManager->Cash) {
 				ImGui::Separator();
 				if (ImGui::InputInt("BP", &currency, 1000, 10000))
-					PManager->Cash = currency;
+					//PManager->Cash = currency;
+					InterlockedExchange(&PManager->Cash,currency);
 			}
 
 			// TODO: Disabled until I can figure out a way to re-apply the hooks
