@@ -11,6 +11,9 @@ namespace Overlay{
 	// 0 = Disabled; 1 = Disco; 2 = Solid
 	extern int iColorsChoice;
 
+	// Popupmenu for Cheat-Like options
+	void CheatMenu();
+
 	// Moved all the Overlay-controls related code in here
 	void OverlayLogic();
 
