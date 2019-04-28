@@ -14,10 +14,10 @@ namespace Configs {
 	extern std::vector<std::string> presetFiles;
 
 	// Save the current Configuration in presetName
-	void SaveRandomizer(const char* presetName, RaidenParts* partsToSave);
+	void SaveRandomizer(const char* presetName, RaidenParts* partsToSave, VRGBA* colors);
 
 	// Restore Saved configuration to Parts
-	void LoadRandomizer(const char* presetName, RaidenParts* partsToLoad);
+	void LoadRandomizer(const char* presetName, RaidenParts* partsToLoad, VRGBA* colors);
 
 	//std::vector<std::string> presetFiles = {""};
 

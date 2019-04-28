@@ -74,6 +74,7 @@
     <IncludePath>$(SolutionDir)\include;$(IncludePath)</IncludePath>
     <ReferencePath>$(VC_ReferencesPath_x86);</ReferencePath>
     <LibraryPath>$(SolutionDir)\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <OutDir>G:\Program Files (x86)\Steam\steamapps\common\METAL GEAR RISING REVENGEANCE\Plugins</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -159,7 +160,6 @@ if $(Configuration) == Release 7z u -tzip -r -mx=9 $(SolutionDir)Package\Package
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Configs.cpp" />
-    <ClCompile Include="DetourHooking.cpp" />
     <ClCompile Include="dllmain.cpp">
       <DeploymentContent>true</DeploymentContent>
     </ClCompile>
@@ -175,7 +175,6 @@ if $(Configuration) == Release 7z u -tzip -r -mx=9 $(SolutionDir)Package\Package
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Configs.h" />
-    <ClInclude Include="DetourHooking.h" />
     <ClInclude Include="GlobalVariables.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
