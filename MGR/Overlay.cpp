@@ -10,7 +10,7 @@ static bool bJumpHeightModified = false;
 static bool bSprintSpeedModified = false;
 
 namespace Overlay {
-	static const char* selectedPreset = { 0 };
+	const char* selectedPreset = { 0 };
 	int iColorsChoice = 0;
 
 	std::mutex mtx;	

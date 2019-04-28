@@ -7,6 +7,7 @@
 #include <vector>
 
 namespace Overlay{
+	extern const char* selectedPreset;
 
 	// 0 = Disabled; 1 = Disco; 2 = Solid
 	extern int iColorsChoice;
