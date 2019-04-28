@@ -33,13 +33,17 @@ MinimapZoom? (Default 1.8f)
 0163D2C8
 
 RealGravity/Jump Height? (Default 0.03f)
-0163D2CC
+0163D2CC // RVA: 0x7BF8D2 ?
+
 
 AirControl? (Default 0.0017453292);
 0163D824
 
-Jump Height can be modified in P10000-class at 0x920
-NOP out writes at 00B9945F, 00B9952D, 00BC6233, 00BBF8D8, 00BC58C3 or possible write the value over and over again?!
+Blade Mode related func
+00D14327
+
+Sprinting related func
+00BDD6E7
 ##############################################################
 
 
