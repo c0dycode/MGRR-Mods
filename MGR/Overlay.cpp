@@ -59,6 +59,7 @@ namespace Overlay {
 			ImGui::SameLine();
 			if (ImGui::Button("UN-Randomize Raiden Body")) {
 				UnRandomizeRaiden(P10000);
+				selectedPreset = "";
 			}
 
 			// Dropdownlist with all the available saved presets
@@ -89,7 +90,7 @@ namespace Overlay {
 			}
 
 			// Popupwindow to save to a new Preset
-			if (ImGui::BeginPopupModal("Save Preset")) {
+			if (ImGui::BeginPopupModal("Save Preset", 0, ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize)) {
 				static char str0[128] = "";
 				ImGui::InputText("Preset Name:", str0, IM_ARRAYSIZE(str0));
 				if (ImGui::Button("Save")) {
