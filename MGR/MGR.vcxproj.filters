@@ -45,9 +45,6 @@
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="DetourHooking.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Configs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Configs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DetourHooking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GlobalVariables.h">

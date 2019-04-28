@@ -3,7 +3,7 @@
 namespace Configs {
 
 	// Save the current Configuration in presetName
-	void SaveRandomizer(const char* presetName, RaidenParts* partsToSave) {
+	void SaveRandomizer(const char* presetName, RaidenParts* partsToSave, VRGBA* colors) {
 
 		// Append fileextension, because the GUI will only ask for a name and not a filename
 		std::string presetFilename = std::string(presetName).append(".txt");
@@ -11,6 +11,8 @@ namespace Configs {
 		std::ofstream presetFile;
 		std::string filePath = std::string("..\\Plugins\\Presets\\").append(presetFilename);
 		presetFile.open(filePath);
+
+		#pragma region Model Parts
 
 		presetFile << "[Chest]\n";
 		presetFile << "X=" << partsToSave->Chest->X << "\n";
@@ -41,12 +43,21 @@ namespace Configs {
 		presetFile << "X=" << partsToSave->Head2->X << "\n";
 		presetFile << "Y=" << partsToSave->Head2->Y << "\n";
 		presetFile << "Z=" << partsToSave->Head2->Z << "\n";
+		#pragma endregion
+
+		#pragma region Colors
+		presetFile << "[Colors]\n";
+		presetFile << "R=" << colors->R << "\n";
+		presetFile << "G=" << colors->G << "\n";
+		presetFile << "B=" << colors->B << "\n";
+		presetFile << "A=" << colors->A << "\n";
+		#pragma endregion 
 
 		presetFile.close();
 	}
 
 	// Restore Saved configuration to Parts
-	void LoadRandomizer(const char* presetName, RaidenParts* partsToLoad) {
+	void LoadRandomizer(const char* presetName, RaidenParts* partsToLoad, VRGBA* colors) {
 		std::string presetFilename = std::string(presetName).append(".txt");
 
 		std::string filePath = std::string("..\\Plugins\\Presets\\").append(presetFilename);
@@ -73,12 +84,28 @@ namespace Configs {
 				current = partsToLoad->RightLowerLeg;
 			if (line == "[Head2]")
 				current = partsToLoad->Head2;
+
+			#pragma region Colors
+			if (line.find("R=") != std::string::npos) {
+				line.replace(0, 2, "");
+				colors->R = strtof(line.c_str(), NULL);
+			}
+			if (line.find("G=") != std::string::npos) {
+				line.replace(0, 2, "");
+				colors->G = strtof(line.c_str(), NULL);
+			}
+			if (line.find("B=") != std::string::npos) {
+				line.replace(0, 2, "");
+				colors->B = strtof(line.c_str(), NULL);
+			}
+			if (line.find("A=") != std::string::npos) {
+				line.replace(0, 2, "");
+				colors->A = strtof(line.c_str(), NULL);
+			}
+			#pragma endregion
+
 			if (!current)
 				continue;
-
-			size_t foundX = std::string::npos;
-			size_t foundY = std::string::npos;
-			size_t foundZ = std::string::npos;
 
 			if (line.find("X=") != std::string::npos) {
 				line.replace(0, 2, "");
