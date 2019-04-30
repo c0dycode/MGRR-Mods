@@ -1,3 +1,7 @@
+# Discord
+I've decided it might be a neat idea to have a dedicated discord server for my projects.
+https://discord.gg/TRgk5tV
+
 # Usage
 Atm inject DLL via any Injector. CheatEngine can do that.
 
