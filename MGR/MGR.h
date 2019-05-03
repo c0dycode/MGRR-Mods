@@ -176,8 +176,6 @@ enum class ESelectedWig : int32_t
 	WigC = 3
 };
 
-
-
 class PlayerManager
 {
 public:
@@ -288,14 +286,21 @@ public:
 	float N00000592; //0x0040
 }; //Size: 0x0044
 
+class MeshInfo
+{
+public:
+	char pad_0000[64]; //0x0000
+	char* MeshTarget; //0x0040
+}; //Size: 0x0044
+
 class cMesh
 {
 public:
-	char pad_0000[16]; //0x0000
-	float ArmorGlowR; //0x0010
-	float ArmorGlowG; //0x0014
-	float ArmorGlowB; //0x0018
-	float ArmorAlpha; //0x001C
+	char pad_0004[12]; //0x0004
+	float GlowR; //0x0010
+	float GlowG; //0x0014
+	float GlowB; //0x0018
+	float Alpha; //0x001C
 	float N000005AC; //0x0020
 	float N000005AD; //0x0024
 	float N000005AE; //0x0028
@@ -305,11 +310,19 @@ public:
 	float N000005BD; //0x0044
 	float N000005BE; //0x0048
 	float N000005BF; //0x004C
-	float ArmorGlowDiscoR; //0x0050
-	float ArmorGlowDiscoG; //0x0054
-	float ArmorGlowDiscoB; //0x0058
-	float ArmorGlowDiscoAlpha; //0x005C
-	char pad_0060[16]; //0x0060
+	float GlowDiscoR; //0x0050
+	float GlowDiscoG; //0x0054
+	float GlowDiscoB; //0x0058
+	float GlowDiscoAlpha; //0x005C
+	class MeshInfo* MeshInfo; //0x0060
+	char pad_0064[4]; //0x0064
+	uint8_t HexA; //0x0068
+	uint8_t HexB; //0x0069
+	uint8_t HexG; //0x006A
+	uint8_t HexR; //0x006B
+	char pad_006C[4]; //0x006C
+
+	virtual void Function0();
 }; //Size: 0x0070
 
 
@@ -727,7 +740,7 @@ class PTenThousand : public cPart
 public:
 	class N000031DB ModelBaseQuestionmark; //0x00B0
 	char pad_0130[496]; //0x0130
-	class cMesh* ArmorMeshes; //0x0320
+	class cMesh* Meshes; //0x0320
 	uint32_t MeshesCount; //0x0324
 	char pad_0328[20]; //0x0328
 	uint32_t ID; //0x033C
@@ -1145,5 +1158,6 @@ public:
 
 void RandomizeBody(PTenThousand* pTenK);
 void UnRandomizeBody(PTenThousand* pTenK);
+void LogMeshInfo(PTenThousand* pTenK);
 
 #endif
