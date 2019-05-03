@@ -152,12 +152,41 @@ namespace Overlay {
 
 		// Only display if we have a valid pointer to class
 		if (P10000) {
+			if (P10000->MeshesCount > 0) {
+				if (ImGui::Button("Randomize Character Colors")) {
+					RandomizeColors(P10000, 1.0f, 2.5f);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Un-Randomize Character Colors")) {
+					UnRandomizeColors(P10000);
+				}
+			}
+			if (PlWig && PlWig->MeshesCount > 0) {
+				if (ImGui::Button("Randomize Hair Color")) {
+					RandomizeColors(PlWig, 1.0f, 1.5);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Un-Randomize Hair Color")) {
+					UnRandomizeColors(PlWig);
+				}
+			}
+
+			if (PlSwordSheath && PlSwordSheath->MeshesCount > 0) {
+				if (ImGui::Button("Randomize Sheath Color")) {
+					RandomizeColors(PlSwordSheath, 1.0f, 3.0f);
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Un-Randomize Sheath Color")) {
+					UnRandomizeColors(PlSwordSheath);
+				}
+			}
+
 			ImGui::Separator();
-			if (ImGui::Button("Randomize Raiden Body")) {
+			if (ImGui::Button("Randomize Character Body")) {
 				RandomizeBody(P10000);
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("UN-Randomize Raiden Body")) {
+			if (ImGui::Button("UN-Randomize Character Body")) {
 				UnRandomizeBody(P10000);
 				selectedPreset = "";
 			}
@@ -260,9 +289,25 @@ namespace Overlay {
 			if (ImGui::SliderFloat("Jump Height", &fJumpHeightModifier, 0.03f, 0.3f)) {
 				if (!bJumpHeightModified) {
 					DWORD old;
+
+					#pragma region Raiden
 					VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
 					*(float**)(BaseAddress + 0x7BF8D2 + 2) = &fJumpHeightModifier;
 					VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, old, &old);
+					#pragma endregion
+
+					#pragma region Sam
+					VirtualProtect((LPVOID)(BaseAddress + 0x46A5A4 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+					*(float**)(BaseAddress + 0x46A5A4 + 2) = &fJumpHeightModifier;
+					VirtualProtect((LPVOID)(BaseAddress + 0x46A5A4 + 2), 4, old, &old);
+					#pragma endregion
+
+					#pragma region BladeWolf
+					VirtualProtect((LPVOID)(BaseAddress + 0x4AC7FE + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+					*(float**)(BaseAddress + 0x4AC7FE + 2) = &fJumpHeightModifier;
+					VirtualProtect((LPVOID)(BaseAddress + 0x4AC7FE + 2), 4, old, &old);
+					#pragma endregion
+
 					bJumpHeightModified = true;
 				}
 			}
@@ -271,13 +316,34 @@ namespace Overlay {
 			if (ImGui::SliderFloat("Jump Speed", &fJumpSpeedModifier, 0.12f, 0.8f)) {
 				if (!bJumpSpeedModified) {
 					DWORD old;
-					VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, PAGE_EXECUTE_READWRITE, &old);
 
+					#pragma region Raiden
+					VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, PAGE_EXECUTE_READWRITE, &old);
 					// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
 					if (memcmp((LPVOID)(BaseAddress + 0x7BFC51), "\x74\x5F", 2) == 0)
 						memcpy((LPVOID)(BaseAddress + 0x7BFC51), "\xEB\x5F", 2);
 					*(float**)(BaseAddress + 0x7BFCEF + 2) = &fJumpSpeedModifier;
 					VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, old, &old);
+					#pragma endregion
+
+					#pragma region Sam
+					VirtualProtect((LPVOID)(BaseAddress + 0x46A914 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+					// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
+					if (memcmp((LPVOID)(BaseAddress + 0x46A8FD), "\x75\x15", 2) == 0)
+						memcpy((LPVOID)(BaseAddress + 0x46A8FD), "\xEB\x15", 2);
+					*(float**)(BaseAddress + 0x46A914 + 2) = &fJumpSpeedModifier;
+					VirtualProtect((LPVOID)(BaseAddress + 0x46A914 + 2), 4, old, &old);
+					#pragma endregion
+
+					#pragma region BladeWolf
+					VirtualProtect((LPVOID)(BaseAddress + 0x4ACA75 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+					// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
+					if (memcmp((LPVOID)(BaseAddress + 0x4ACA4E), "\x74\x25", 2) == 0)
+						memcpy((LPVOID)(BaseAddress + 0x4ACA4E), "\xEB\x25", 2);
+					*(float**)(BaseAddress + 0x4ACA75 + 2) = &fJumpSpeedModifier;
+					VirtualProtect((LPVOID)(BaseAddress + 0x4ACA75 + 2), 4, old, &old);
+					#pragma endregion
+
 					bJumpSpeedModified = true;
 				}
 			}
