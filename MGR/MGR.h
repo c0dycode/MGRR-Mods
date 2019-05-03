@@ -316,25 +316,271 @@ public:
 class cPart
 {
 public:
-	char pad_0004[88]; //0x0004
-	float N000006CD; //0x005C
-	char pad_0060[16]; //0x0060
+	char pad_0004[108]; //0x0004
 	float X; //0x0070
 	float Y; //0x0074
 	float Z; //0x0078
-	char pad_007C[4]; //0x007C
-	float N000006BC; //0x0080
-	float N000004D0; //0x0084
-	float N000004D1; //0x0088
-	char pad_008C[20]; //0x008C
+	char pad_007C[36]; //0x007C
 	uint16_t PartIndex; //0x00A0
 	uint16_t Freeze; //0x00A2
-	char pad_00A4[4]; //0x00A4
-	class PTenThousand* Owner; //0x00A8
-	char pad_00AC[4]; //0x00AC
+	char pad_00A4[12]; //0x00A4
 
 	virtual void Function0();
+	virtual void Function1();
+	virtual void Function2();
+	virtual void Function3();
+	virtual void Function4();
+	virtual void Function5();
+	virtual void Function6();
+	virtual void Function7();
+	virtual void Function8();
+	virtual void Function9();
+	virtual void Function10();
+	virtual void Function11();
+	virtual void Function12();
+	virtual void Function13();
+	virtual void Function14();
+	virtual void AccessSomeStaticArray();
+	virtual void BigFuncLotsOfFloats();
+	virtual void Function17();
+	virtual void Function18();
+	virtual void Function19();
+	virtual void Function20();
+	virtual void Function21();
+	virtual void Function22();
+	virtual void Function23();
+	virtual void Function24();
+	virtual void Function25();
+	virtual void Function26();
+	virtual void Function27();
+	virtual void Function28();
+	virtual void Function29();
+	virtual void Function30();
+	virtual void Function31();
+	virtual void Function32();
+	virtual void Function33();
+	virtual void Function34();
+	virtual void Function35();
+	virtual void Function36();
+	virtual void Function37();
+	virtual void Function38();
+	virtual void Function39();
+	virtual void Function40();
+	virtual void Function41();
+	virtual void Function42();
+	virtual void Function43();
+	virtual void Function44();
+	virtual void SomethingWithPlayerPosition();
+	virtual void Function46();
+	virtual void Function47();
+	virtual void Function48();
+	virtual void Function49();
+	virtual void Function50();
+	virtual void Function51();
+	virtual void Function52();
+	virtual void Function53();
+	virtual void Function54();
+	virtual void Function55();
+	virtual void Function56();
+	virtual void Function57();
+	virtual void Function58();
+	virtual void Function59();
+	virtual void Function60();
+	virtual void Function61();
+	virtual void Function62();
+	virtual void Function63();
+	virtual void Function64();
+	virtual void Function65();
+	virtual void Function66();
+	virtual void Function67();
+	virtual void Function68();
+	virtual void Function69();
+	virtual void Function70();
+	virtual void Function71();
+	virtual void Function72();
+	virtual void Function73();
+	virtual void Function74();
+	virtual void Function75();
+	virtual void Function76();
+	virtual void Function77();
+	virtual void Function78();
+	virtual void Function79();
+	virtual void Function80();
+	virtual void Function81();
+	virtual void Function82();
+	virtual void Function83();
+	virtual void Function84();
+	virtual void Function85();
+	virtual void Function86();
+	virtual void Function87();
+	virtual void Function88();
+	virtual void Function89();
+	virtual void Function90();
+	virtual void Function91();
+	virtual void Function92();
+	virtual void Function93();
+	virtual void Function94();
+	virtual void Function95();
+	virtual void Function96();
+	virtual void Function97();
+	virtual void Function98();
+	virtual void Function99();
+	virtual void Function100();
+	virtual void Function101();
+	virtual void Function102();
+	virtual void Function103();
+	virtual void Function104();
+	virtual void Function105();
+	virtual void Function106();
+	virtual void Function107();
+	virtual void Function108();
+	virtual void Function109();
+	virtual void Function110();
+	virtual void Function111();
+	virtual void Function112();
+	virtual void Function113();
+	virtual void Function114();
+	virtual void Function115();
+	virtual void Function116();
+	virtual void Function117();
+	virtual void Function118();
+	virtual void Function119();
+	virtual void Function120();
+	virtual void Function121();
+	virtual void Function122();
+	virtual void Function123();
+	virtual void Function124();
+	virtual void Function125();
+	virtual void Function126();
+	virtual void Function127();
+	virtual void Function128();
+	virtual void Function129();
+	virtual void Function130();
+	virtual void Function131();
+	virtual void Function132();
+	virtual void Function133();
+	virtual void Function134();
+	virtual void Function135();
+	virtual void Function136();
+	virtual void Function137();
+	virtual void Function138();
+	virtual void Function139();
+	virtual void Function140();
+	virtual void Function141();
+	virtual void Function142();
+	virtual void Function143();
+	virtual void Function144();
+	virtual void Function145();
+	virtual void Function146();
+	virtual void Function147();
+	virtual void Function148();
+	virtual void Function149();
+	virtual void Function150();
+	virtual void Function151();
+	virtual void Function152();
+	virtual void Function153();
+	virtual void Function154();
+	virtual void Function155();
+	virtual void Function156();
+	virtual void Function157();
+	virtual void Function158();
+	virtual void SomethingCameraPosition();
+	virtual void Function160();
+	virtual void Function161();
+	virtual void Function162();
+	virtual void Function163();
+	virtual void Function164();
+	virtual void Function165();
+	virtual void Function166();
+	virtual void Function167();
+	virtual void Function168();
+	virtual void Function169();
+	virtual void Function170();
+	virtual void Function171();
+	virtual void Function172();
+	virtual void Function173();
+	virtual void Function174();
+	virtual void Function175();
+	virtual void Function176();
+	virtual void Function177();
+	virtual void Function178();
+	virtual void Function179();
+	virtual void Function180();
+	virtual void Function181();
+	virtual void Function182();
+	virtual void Function183();
+	virtual void Function184();
+	virtual void Function185();
+	virtual void Function186();
+	virtual void Function187();
+	virtual void Function188();
+	virtual void Function189();
+	virtual void Function190();
+	virtual void Function191();
+	virtual void Function192();
+	virtual void Function193();
+	virtual void Function194();
+	virtual void TakeDamage();
+	virtual void IncreaseHP();
+	virtual void Function197();
+	virtual void Function198();
+	virtual void Function199();
+	virtual void Function200();
+	virtual void Function201();
+	virtual void Function202();
+	virtual void Function203();
+	virtual void Function204();
+	virtual void Function205();
+	virtual void Function206();
+	virtual void Function207();
+	virtual void Function208();
+	virtual void Function209();
+	virtual void Function210();
+	virtual void Function211();
+	virtual void Function212();
+	virtual void Function213();
+	virtual void SomethingWhenFalling();
+	virtual void Stunned();
+	virtual void Function216();
+	virtual void KnockDown();
+	virtual void Function218();
+	virtual void Function219();
+	virtual void Function220();
+	virtual void Function221();
+	virtual void Function222();
+	virtual void IsCharacterDead();
+	virtual void Function224();
+	virtual void ShowPrimaryWeapon();
+	virtual void Function226();
+	virtual void Function227();
+	virtual void Function228();
+	virtual void Function229();
+	virtual void Function230();
+	virtual void Function231();
+	virtual void Function232();
+	virtual void Function233();
+	virtual void Function234();
+	virtual void Function235();
+	virtual void Function236();
+	virtual void Function237();
+	virtual void Function238();
+	virtual void Function239();
+	virtual void Function240();
+	virtual void Function241();
+	virtual void HandleUserInput();
+	virtual void TickQuestionMark();
+	virtual void Function244();
+	virtual void Function245();
+	virtual void Function246();
+	virtual void Function247();
+	virtual void Function248();
+	virtual void Function249();
+	virtual void Function250();
+	virtual void Function251();
+	virtual void Function252();
+	virtual void Function253();
 }; //Size: 0x00B0
+
 
 class RaidenParts
 {
@@ -470,61 +716,50 @@ enum EPTenThousandVTable {
 	TakeDamage = 195
 };
 
-class PTenThousand
+class N000031DB
 {
 public:
-	char pad_0004[60]; //0x0004
-	Vector3 CameraPosition; //0x0040
-	char pad_004C[4]; //0x004C
-	Vector4 PlayerPosition; //0x0050
-	char pad_0060[16]; //0x0060
-	float ModelWidth; //0x0070
-	float ModelHeight; //0x0074
-	float ModelLength; //0x0078
-	char pad_007C[644]; //0x007C
-	class N00000581* N00000338; //0x0300
-	char pad_0304[28]; //0x0304
+	char pad_0000[128]; //0x0000
+}; //Size: 0x0080
+
+class PTenThousand : public cPart
+{
+public:
+	class N000031DB ModelBaseQuestionmark; //0x00B0
+	char pad_0130[496]; //0x0130
 	class cMesh* ArmorMeshes; //0x0320
-	uint32_t MeshesCount; // 0x324
+	uint32_t MeshesCount; //0x0324
 	char pad_0328[20]; //0x0328
 	uint32_t ID; //0x033C
-	uint32_t N00000348; //0x0340
-	char pad_0344[16]; //0x0344
-	class RaidenParts* RaidenPartCollection; //0x0354
-	char pad_0358[316]; //0x0358
-	void* AnalyzeThis; //0x0494
-	char pad_0498[76]; //0x0498
-	uint32_t OneEqualsCameraStuck; //0x04E4
-	char pad_04E8[8]; //0x04E8
-	class N0000439F* SomethingMustBeWithThis; //0x04F0
-	char pad_04F4[156]; //0x04F4
-	uint32_t N000003D9; //0x0590
-	char pad_0594[132]; //0x0594
-	uint32_t LastAction; //0x0618
-	uint32_t N000003F8; //0x061C
-	char pad_0620[308]; //0x0620
-	class N00000F7B* BattleParamter; //0x0754
-	char pad_0758[120]; //0x0758
-	class N00001333* StateMachineContext; //0x07D0
-	char pad_07D4[156]; //0x07D4
+	char pad_0340[20]; //0x0340
+	class RaidenParts* PartCollection; //0x0354
+	uint32_t PartCount; //0x0358
+	char pad_035C[1100]; //0x035C
+	class N00007278* CollisionArrayData; //0x07A8
+	char pad_07AC[12]; //0x07AC
+	class AllocatedArray* CollisionArray; //0x07B8
+	char pad_07BC[180]; //0x07BC
 	uint32_t CurrentHP; //0x0870
-	uint32_t BaseHP; //0x0874
-	char pad_0878[124]; //0x0878
-	float N000004B1; //0x08F4
-	char pad_08F8[2824]; //0x08F8
-	uint32_t HidePrimaryWeapon; //0x1400
-	char pad_1404[3988]; //0x1404
-	class N00001A91* SomeArray; //0x2398
-	uint32_t SomeArrayCount; //0x239C
-	char pad_23A0[5312]; //0x23A0
-	uint32_t CanNotSprint; //0x3860
-	char pad_3864[2152]; //0x3864
-	uint32_t bIsSprinting; //0x40CC
-	char pad_40D0[4016]; //0x40D0
-	uint32_t bCanSprint; //0x5080
-	char pad_5084[872]; //0x5084
-	uint32_t N00002197; //0x53EC
-	char pad_53F0[1284]; //0x53F0
+	uint32_t MaxHP; //0x0874
+	char pad_0878[3708]; //0x0878
+	uint32_t HidePrimaryWeapon; //0x16F4
+	char pad_16F8[9308]; //0x16F8
+	uint32_t CanNotSprint; //0x3B54
+	char pad_3B58[76]; //0x3B58
+	uint32_t bIsBladeModeActive; //0x3BA4
+	char pad_3BA8[1324]; //0x3BA8
+	class N000051D4* N00001BE3; //0x40D4
+	char pad_40D8[152]; //0x40D8
+	uint32_t bIsAutoClimbing; //0x4170
+	char pad_4174[60]; //0x4174
+	float N00001C1A; //0x41B0
+	char pad_41B4[4]; //0x41B4
+	float N00001C1C; //0x41B8
+	char pad_41BC[516]; //0x41BC
+	uint32_t bIsSprinting; //0x43C0
+	char pad_43C4[4016]; //0x43C4
+	uint32_t bCanSprint; //0x5374
+	char pad_5378[136]; //0x5378
 
 	virtual void Function0();
 	virtual void Function1();

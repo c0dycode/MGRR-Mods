@@ -169,7 +169,7 @@ namespace Overlay {
 					if (ImGui::Selectable(Configs::presetFiles.at(n).c_str(), is_selected)) {
 						selectedPreset = Configs::presetFiles.at(n).c_str();
 						if (selectedPreset && strlen(selectedPreset) > 0)
-							Configs::LoadRandomizer(selectedPreset, P10000->RaidenPartCollection, vRaidenColors);
+							Configs::LoadRandomizer(selectedPreset, P10000->PartCollection, vRaidenColors);
 					}
 					if (is_selected)
 						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
@@ -192,7 +192,7 @@ namespace Overlay {
 				static char str0[128] = "";
 				ImGui::InputText("Preset Name:", str0, IM_ARRAYSIZE(str0));
 				if (ImGui::Button("Save")) {
-					Configs::SaveRandomizer(str0, P10000->RaidenPartCollection, vRaidenColors);
+					Configs::SaveRandomizer(str0, P10000->PartCollection, vRaidenColors);
 					Configs::GetAvailablePresets();
 					selectedPreset = Configs::presetFiles.at(std::distance(Configs::presetFiles.begin(), std::find(Configs::presetFiles.begin(), Configs::presetFiles.end(), str0))).c_str();
 
@@ -210,7 +210,7 @@ namespace Overlay {
 			if (ImGui::BeginPopupModal("Preset Confirmation", 0, ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize)) {
 				ImGui::Text("Are you sure you want to overwrite the selected Preset?");
 				if (ImGui::Button("Yes")) {
-					Configs::SaveRandomizer(selectedPreset, P10000->RaidenPartCollection, vRaidenColors);
+					Configs::SaveRandomizer(selectedPreset, P10000->PartCollection, vRaidenColors);
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::SameLine();

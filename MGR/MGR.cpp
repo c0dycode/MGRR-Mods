@@ -3,7 +3,7 @@
 void RandomizeBody(PTenThousand* pTenK) {
 	static std::default_random_engine e;
 	static std::uniform_real_distribution<> dis(-2.5, 2.5);
-	auto partCollection = pTenK->RaidenPartCollection;
+	auto partCollection = pTenK->PartCollection;
 	if (partCollection) {
 #pragma region Chest
 		if (partCollection->Chest) {
@@ -56,7 +56,7 @@ void RandomizeBody(PTenThousand* pTenK) {
 
 void UnRandomizeBody(PTenThousand* pTenK)
 {
-	auto partCollection = pTenK->RaidenPartCollection;
+	auto partCollection = pTenK->PartCollection;
 	if (partCollection) {
 #pragma region Chest
 		if (partCollection->Chest) {
