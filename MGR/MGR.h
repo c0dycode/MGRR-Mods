@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <cstdint>
 #include <random>
+#include <map>
 
 struct VRGBA {
 public:
@@ -15,6 +16,13 @@ public:
 		G = 1.0f;
 		B = 1.0f;
 		A = 1.0f;		
+	}
+	VRGBA(float r, float g, float b, float a)
+	{
+		R = r;
+		G = g;
+		B = b;
+		A = a;
 	}
 	float R;
 	float G;
@@ -35,6 +43,7 @@ struct Vector4 {
 	float A;
 };
 
+extern std::map<std::string, VRGBA*> colorMap;
 
 // Created with ReClass.NET by KN4CK3R
 
@@ -301,10 +310,10 @@ public:
 	float GlowG; //0x0014
 	float GlowB; //0x0018
 	float Alpha; //0x001C
-	float N000005AC; //0x0020
-	float N000005AD; //0x0024
-	float N000005AE; //0x0028
-	float N000005AF; //0x002C
+	float Glow2R; //0x0020
+	float Glow2G; //0x0024
+	float Glow2B; //0x0028
+	float Alpha2; //0x002C
 	char pad_0030[16]; //0x0030
 	float N000005B4; //0x0040
 	float N000005BD; //0x0044
@@ -1158,6 +1167,8 @@ public:
 
 void RandomizeBody(PTenThousand* pTenK);
 void UnRandomizeBody(PTenThousand* pTenK);
-void LogMeshInfo(PTenThousand* pTenK);
+void RandomizeColors(PTenThousand*, float, float);
+void UnRandomizeColors(PTenThousand* pTenK);
 
+void RefreshColorsIfNeeded();
 #endif
