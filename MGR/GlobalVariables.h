@@ -14,6 +14,8 @@ extern VRGBA* vRaidenColors;
 extern bool bShowOverlay;
 extern bool bDisableTakingDamage;
 extern bool bHaveOriginalVMT;
+extern bool bColorsNeedRefresh;
+
 extern int currency;
 //extern int iColorsChoice;
 
