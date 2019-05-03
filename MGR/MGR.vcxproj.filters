@@ -57,6 +57,12 @@
     <ClCompile Include="Overlay.h">
       <Filter>Header Files\Overlay</Filter>
     </ClCompile>
+    <ClCompile Include="MgrHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVariables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MGR.h">
@@ -90,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GlobalVariables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MgrHooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
