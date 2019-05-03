@@ -1,22 +1,110 @@
 #include "Overlay.h"
+#include <map>
 #include <mutex>
 
-static float fJumpHeightModifier = 0.03f;
-static float fJumpSpeedModifier = 0.12f;
-static float fSprintSpeedModifier = 0.001f;
+static float fJumpHeightModifier	= 0.03f;
+static float fJumpSpeedModifier		= 0.12f;
+static float fSprintSpeedModifier	= 0.001f;
 
-static bool bJumpSpeedModified = false;
-static bool bJumpHeightModified = false;
-static bool bSprintSpeedModified = false;
+static bool bJumpSpeedModified		= false;
+static bool bJumpHeightModified		= false;
+static bool bSprintSpeedModified	= false;
+static bool bIsRainbowActive		= false;
+
+std::map<EArmorSkin, std::string> ArmorToLoad =
+{
+	{EArmorSkin::CustomBody, "Custom Body"},
+	{EArmorSkin::CustomBodyBlue, "Custom Body Blue"},
+	{EArmorSkin::CustomBodyRed, "Custom Body Red"},
+	{EArmorSkin::CustomBodyYellow, "Custom Body Yellow"},
+	{EArmorSkin::CustomBodyDesperado, "Custom Body Desperado"},
+	{EArmorSkin::Suit, "Suit"},
+	{EArmorSkin::Mariachi, "Mariachi"},
+	{EArmorSkin::StandardBody, "Standard Body"},
+	{EArmorSkin::OriginalBody, "Original Body"},
+	{EArmorSkin::GrayFox, "Gray Fox"},
+	{EArmorSkin::WhiteArmor, "White Armor"},
+	{EArmorSkin::InfernoArmor, "Inferno Armor"},
+	{EArmorSkin::CommandoArmor, "Commando Armor"}
+};
+
+std::vector<std::string> ArmorNames = { "" };
+
+using SetArmorSkin = int(__stdcall*)(EArmorSkin skinToSet);
+SetArmorSkin oSetArmorSkin;
+
+using SetArmorSkin2 = int(__stdcall*)();
+SetArmorSkin2 sas2;
 
 namespace Overlay {
-	const char* selectedPreset = { 0 };
+	const char* selectedPreset = { "" };
+	const char* selectedArmor = { "" };
 	int iColorsChoice = 0;
+
+	bool bRandomizeTargetedEnemy = false;
+
+	uint32_t LastEnemyRandomized = 0;
 
 	std::mutex mtx;	
 
+	void CreateVectOfArmor() {
+		for (auto it = ArmorToLoad.begin(); it != ArmorToLoad.end(); ++it) {
+			ArmorNames.push_back(it->second);
+		}
+
+		// Assign the Functionpointer
+		oSetArmorSkin = ((SetArmorSkin)(BaseAddress + 0x5C4F20));
+		sas2 = ((SetArmorSkin2)(BaseAddress + 0x5C7C20));
+	}
+
+	void ReadSelectedArmorFromGame() {
+		if (*(EArmorSkin * *)(BaseAddress + 0x5C4F59 + 2) && strlen(selectedArmor) <= 0) {
+			for (auto it = ArmorToLoad.begin(); it != ArmorToLoad.end(); ++it) {
+				if (it->first == **(EArmorSkin**)(BaseAddress + 0x5C4F59 + 2))
+					selectedArmor = it->second.c_str();
+			}
+		}
+	}
+
+	void SetArmor(const char* armorName) {
+		for (auto it = ArmorToLoad.begin(); it != ArmorToLoad.end(); ++it) {
+			if (strstr(it->second.c_str(), armorName))
+				if (oSetArmorSkin) {
+					oSetArmorSkin(it->first);
+					InterlockedExchange((*(uintptr_t**)(BaseAddress + 0x5C7C45 + 1)), static_cast<uint32_t>(it->first));
+					InterlockedExchange((*(uintptr_t**)(BaseAddress + 0x5C7C5D + 1)), static_cast<uint32_t>(it->first));
+					sas2();
+				}
+		}
+	}
+
+	//static bool bTerminateRainbow;
+	//// Does the Rainbow work in a different thread
+	//void EnableRainbow() {
+	//	bIsRainbowActive = true;
+	//	
+	//	while (!bTerminateRainbow) {
+	//		
+	//		if (mtx.try_lock()) {
+	//			
+	//		
+
+	//			vRaidenColors->R = r;
+	//			vRaidenColors->G = g;
+	//			vRaidenColors->B = b;
+	//			mtx.unlock();
+	//		}			
+	//		Sleep(10);
+	//	}
+	//	bIsRainbowActive = false;
+	//}
+
 	// Moved all the Overlay-controls related code in here
 	void OverlayLogic() {
+		// Make sure that the Rainbow is being terminated as soon as possible when no longer selected
+		/*if (bIsRainbowActive && iColorsChoice != 3)
+			bTerminateRainbow = true;*/
+
 		// Overlay Window Title and optional settings/flags
 		ImGui::Begin("MGR Things - by c0dycode :)", 0, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -26,6 +114,8 @@ namespace Overlay {
 		ImGui::RadioButton("Disco", &iColorsChoice, 1);
 		ImGui::SameLine();
 		ImGui::RadioButton("Solid", &iColorsChoice, 2);
+		/*ImGui::SameLine();
+		ImGui::RadioButton("Rainbow", &iColorsChoice, 3);*/
 
 		// Restore default colors, jic they have been changed
 		if (iColorsChoice == 0) {
@@ -35,30 +125,38 @@ namespace Overlay {
 			vRaidenColors->A = 1.0f;
 		}
 
-		// If Colorselection is not Disabled
-		if (iColorsChoice >= 1) {
-			ImGui::BeginGroup();
-			ImGui::SliderFloat("Red", &vRaidenColors->R, 1.0f, 5.0f);
-			ImGui::SliderFloat("Green", &vRaidenColors->G, 1.0f, 5.0f);
-			ImGui::SliderFloat("Blue", &vRaidenColors->B, 1.0f, 5.0f);
-			ImGui::SliderFloat("Transparency", &vRaidenColors->A, 0.1f, 1.0f);
-			ImGui::EndGroup();
+		if (mtx.try_lock()) {
+			// If Colorselection is not Disabled
+			if (iColorsChoice >= 1 && iColorsChoice < 3) {
+				ImGui::BeginGroup();
+				ImGui::SliderFloat("Red", &vRaidenColors->R, 1.0f, 5.0f);
+				ImGui::SliderFloat("Green", &vRaidenColors->G, 1.0f, 5.0f);
+				ImGui::SliderFloat("Blue", &vRaidenColors->B, 1.0f, 5.0f);
+				ImGui::SliderFloat("Transparency", &vRaidenColors->A, 0.1f, 1.0f);
+				ImGui::EndGroup();
 
-			if (iColorsChoice == 1) {
-				ImGui::Separator();
-				ImGui::SliderInt("Delay", &discoDelay, 50, 150);
+				if (iColorsChoice == 1) {
+					ImGui::Separator();
+					ImGui::SliderInt("Delay", &discoDelay, 50, 150);
+				}
 			}
+			mtx.unlock();
 		}
+		// Rainbow choice
+		/*if (iColorsChoice == 3 && !bIsRainbowActive) {
+			std::thread t (EnableRainbow);
+			t.detach();
+		}*/
 
 		// Only display if we have a valid pointer to class
 		if (P10000) {
 			ImGui::Separator();
 			if (ImGui::Button("Randomize Raiden Body")) {
-				RandomizeRaiden(P10000);
+				RandomizeBody(P10000);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("UN-Randomize Raiden Body")) {
-				UnRandomizeRaiden(P10000);
+				UnRandomizeBody(P10000);
 				selectedPreset = "";
 			}
 
@@ -121,8 +219,30 @@ namespace Overlay {
 				ImGui::EndPopup();
 			}
 		}
+
+		// Dropdownlist with all the available armornames
+		//if (ImGui::BeginCombo("Armors", selectedArmor)) {
+		//	for (int n = 0; n < ArmorNames.size(); n++)
+		//	{
+		//		bool is_selected = (selectedArmor == ArmorNames.at(n).c_str()); // You can store your selection however you want, outside or inside your objects
+		//		if (ImGui::Selectable(ArmorNames.at(n).c_str(), is_selected)) {
+		//			selectedArmor = ArmorNames.at(n).c_str();
+		//			if (selectedArmor && strlen(selectedArmor) > 0)
+		//				SetArmor(selectedArmor);
+		//		}
+		//		if (is_selected)
+		//			ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+		//	}
+		//	ImGui::EndCombo();
+		//}
 		
 		ImGui::Separator();
+
+		ImGui::Checkbox("Randomize Targeted Enemy", &bRandomizeTargetedEnemy);
+
+		ImGui::Separator();
+
+
 
 		// Slider to adjust Camera Height
 		if (ImGui::SliderFloat("Camera Height", &fCameraHeigthOffset, 0.1f, 4.0f)) {
@@ -132,53 +252,53 @@ namespace Overlay {
 			VirtualProtect(*(float**)(BaseAddress + 0x6C0C7E + 2), 4, old, &old);
 		}
 
-		mtx.lock();
-		
-		// Slider to adjust Jump Height
-		if (ImGui::SliderFloat("Jump Height", &fJumpHeightModifier, 0.03f, 0.3f)) {
-			if (!bJumpHeightModified) {
-				DWORD old;
-				VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-				*(float**)(BaseAddress + 0x7BF8D2 + 2) = &fJumpHeightModifier;
-				VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, old, &old);
-				bJumpHeightModified = true;
+		if (mtx.try_lock()) {
+
+			// Slider to adjust Jump Height
+			if (ImGui::SliderFloat("Jump Height", &fJumpHeightModifier, 0.03f, 0.3f)) {
+				if (!bJumpHeightModified) {
+					DWORD old;
+					VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+					*(float**)(BaseAddress + 0x7BF8D2 + 2) = &fJumpHeightModifier;
+					VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, old, &old);
+					bJumpHeightModified = true;
+				}
 			}
-		}
-		
-		// Slider to adjust Jump Speed
-		if (ImGui::SliderFloat("Jump Speed", &fJumpSpeedModifier, 0.12f, 0.8f)) {
-			if (!bJumpSpeedModified) {
-				DWORD old;
-				VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-				
-				// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
-				if (memcmp((LPVOID)(BaseAddress + 0x7BFC51), "\x74\x5F", 2) == 0)
-					memcpy((LPVOID)(BaseAddress + 0x7BFC51), "\xEB\x5F", 2);
-				*(float**)(BaseAddress + 0x7BFCEF + 2) = &fJumpSpeedModifier;
-				VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, old, &old);
-				bJumpSpeedModified = true;
+
+			// Slider to adjust Jump Speed
+			if (ImGui::SliderFloat("Jump Speed", &fJumpSpeedModifier, 0.12f, 0.8f)) {
+				if (!bJumpSpeedModified) {
+					DWORD old;
+					VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+
+					// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
+					if (memcmp((LPVOID)(BaseAddress + 0x7BFC51), "\x74\x5F", 2) == 0)
+						memcpy((LPVOID)(BaseAddress + 0x7BFC51), "\xEB\x5F", 2);
+					*(float**)(BaseAddress + 0x7BFCEF + 2) = &fJumpSpeedModifier;
+					VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, old, &old);
+					bJumpSpeedModified = true;
+				}
 			}
+
+			// Slider to adjust Sprint Speed; not working yet
+			/*if (ImGui::SliderFloat("Sprint Speed", &fSprintSpeedModifier, 0.001f, 0.8f)) {
+				if (!bSprintSpeedModified) {
+					DWORD old;
+					VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+					*(float**)(BaseAddress + 0x7DD6E7 + 2) = &fSprintSpeedModifier;
+					VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, old, &old);
+					bSprintSpeedModified = true;
+				}
+			}*/
+			mtx.unlock();
 		}
 
-		// Slider to adjust Sprint Speed; not working yet
-		/*if (ImGui::SliderFloat("Sprint Speed", &fSprintSpeedModifier, 0.0f, 0.8f)) {
-			if (!bSprintSpeedModified) {
-				DWORD old;
-				VirtualProtect((LPVOID)(BaseAddress + 0x7DD6D9 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-				*(float**)(BaseAddress + 0x7DD6D9 + 2) = &fSprintSpeedModifier;
-				VirtualProtect((LPVOID)(BaseAddress + 0x7DD6D9 + 2), 4, old, &old);
-				bSprintSpeedModified = true;
-			}
-		}*/
-		mtx.unlock();
-
-// Not sure if this is something that people might actually want lol
-#if _DEBUG
+		// Not sure if this is something that people might actually want lol
+		ImGui::Separator();
 		CheatMenu();
 		if (ImGui::Button("Cheat Menu")) {
 			ImGui::OpenPopup("Cheat Menu");
 		}
-#endif
 	}
 
 	// Popupmenu for Cheat-Like options
