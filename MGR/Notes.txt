@@ -58,7 +58,7 @@ SkyBox
 BackgroundEnvironment
 2F837AD0 = + 001FF4B0
 
-SheethHolder
+SheathHolder
 2F844290 = + 0020BC70
 
 RaidenHair
@@ -76,7 +76,7 @@ RaidenHeadShieldLeft
 RaidenHeadShieldLight
 2F874AB0 = + 0023C490
 
-SwordSheeth
+SwordSheath
 2F878C50 = + 00240630
 
 MainWeaponGrip
