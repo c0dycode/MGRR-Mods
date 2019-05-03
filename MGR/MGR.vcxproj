@@ -165,11 +165,11 @@ if $(Configuration) == Release 7z u -tzip -r -mx=9 $(SolutionDir)Package\Package
     </ClCompile>
     <ClCompile Include="GlobalVariables.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
-    <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_dx9.cpp" />
     <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="MGR.cpp" />
     <ClCompile Include="MgrHooks.cpp" />
     <ClCompile Include="Overlay.cpp" />
@@ -186,6 +186,7 @@ if $(Configuration) == Release 7z u -tzip -r -mx=9 $(SolutionDir)Package\Package
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="LogWindow.h" />
     <ClInclude Include="MGR.h" />
     <ClInclude Include="MgrHooks.h" />
   </ItemGroup>

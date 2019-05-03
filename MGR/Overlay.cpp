@@ -1,4 +1,5 @@
 #include "Overlay.h"
+#include "LogWindow.h"
 #include <map>
 #include <mutex>
 
@@ -10,6 +11,7 @@ static bool bJumpSpeedModified		= false;
 static bool bJumpHeightModified		= false;
 static bool bSprintSpeedModified	= false;
 static bool bIsRainbowActive		= false;
+static bool bShowLogWindow			= false;
 
 std::map<EArmorSkin, std::string> ArmorToLoad =
 {
@@ -45,7 +47,7 @@ namespace Overlay {
 
 	uint32_t LastEnemyRandomized = 0;
 
-	std::mutex mtx;	
+	std::mutex mtx;
 
 	void CreateVectOfArmor() {
 		for (auto it = ArmorToLoad.begin(); it != ArmorToLoad.end(); ++it) {
@@ -299,6 +301,13 @@ namespace Overlay {
 		if (ImGui::Button("Cheat Menu")) {
 			ImGui::OpenPopup("Cheat Menu");
 		}
+
+		if (ImGui::Button("Log")) {
+			bShowLogWindow ^= 1;
+			
+		}
+		if(bShowLogWindow)
+			AppLog::ShowAppLog(&bShowLogWindow);
 	}
 
 	// Popupmenu for Cheat-Like options
