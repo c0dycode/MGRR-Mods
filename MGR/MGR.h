@@ -130,6 +130,53 @@ enum class EBodyParts : int32_t
 	Unknown6 = 1795
 };
 
+enum class EArmorSkin : int32_t
+{
+	CustomBody = 0,
+	CustomBodyBlue = 1,
+	CustomBodyRed = 2,
+	CustomBodyYellow = 3,
+	CustomBodyDesperado = 4,
+	Suit = 5,
+	Mariachi = 6,
+	StandardBody = 7,
+	OriginalBody = 8,
+	GrayFox = 9,
+	WhiteArmor = 10,
+	InfernoArmor = 11,
+	CommandoArmor = 12
+};
+
+enum class ESelectedMainWeapon : int32_t
+{
+	HFBlade = 0,	
+	StunBlade = 1,
+	Unknown = 2,
+	Unknown2 = 3,
+	WoodenSword = 4,
+	HFMurasamaBlade = 5,
+	FoxBlade = 6,
+	HFMachete = 7
+};
+
+enum class ESelectedUniqueWeapon : int32_t
+{
+	None = 0,
+	Unknown = 1,
+	PoleArm = 2,
+	Sai = 3,	
+	PincerBlades = 4
+};
+
+enum class ESelectedWig : int32_t
+{
+	None = 0,
+	WigA = 1,
+	WigB = 2,
+	WigC = 3
+};
+
+
 
 class PlayerManager
 {
@@ -438,7 +485,9 @@ public:
 	class N00000581* N00000338; //0x0300
 	char pad_0304[28]; //0x0304
 	class cMesh* ArmorMeshes; //0x0320
-	char pad_0324[28]; //0x0324
+	uint32_t MeshesCount; // 0x324
+	char pad_0328[20]; //0x0328
+	uint32_t ID; //0x033C
 	uint32_t N00000348; //0x0340
 	char pad_0344[16]; //0x0344
 	class RaidenParts* RaidenPartCollection; //0x0354
@@ -859,7 +908,7 @@ public:
 }; //Size: 0x0040
 
 
-void RandomizeRaiden(PTenThousand* pTenK);
-void UnRandomizeRaiden(PTenThousand* pTenK);
+void RandomizeBody(PTenThousand* pTenK);
+void UnRandomizeBody(PTenThousand* pTenK);
 
 #endif

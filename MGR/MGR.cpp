@@ -1,6 +1,6 @@
 #include "MGR.h"
 
-void RandomizeRaiden(PTenThousand* pTenK) {
+void RandomizeBody(PTenThousand* pTenK) {
 	static std::default_random_engine e;
 	static std::uniform_real_distribution<> dis(-2.5, 2.5);
 	auto partCollection = pTenK->RaidenPartCollection;
@@ -54,7 +54,7 @@ void RandomizeRaiden(PTenThousand* pTenK) {
 	}
 }
 
-void UnRandomizeRaiden(PTenThousand* pTenK)
+void UnRandomizeBody(PTenThousand* pTenK)
 {
 	auto partCollection = pTenK->RaidenPartCollection;
 	if (partCollection) {
