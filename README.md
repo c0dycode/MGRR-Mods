@@ -13,3 +13,6 @@ Then, press the PAUSE-key to open up the overlay and to use the mouse, open the 
 
 Changing the BP/Currency works fine if you enter the values manually, the +/- buttons need to be held down for some reason.
 
+# Third-Party libraries used
+- [ImGui](https://github.com/ocornut/imgui) - absolutely amazing library!
+- [MinHook](https://github.com/TsudaKageyu/minhook) - same goes for this!
