@@ -4,8 +4,10 @@
 static std::map<std::string, VRGBA*> colorMap;
 
 void RandomizeBody(PTenThousand* pTenK) {
-	static std::default_random_engine e;
-	static std::uniform_real_distribution<> dis(-2.5f, 2.5f);
+	static std::random_device rd;
+	static std::mt19937 e(rd());
+	//static std::default_random_engine e;
+	static std::uniform_real_distribution<float> dis(-2.5f, 2.5f);
 
 	auto partCollection = pTenK->PartCollection;
 	if (partCollection) {
@@ -113,12 +115,14 @@ void UnRandomizeBody(PTenThousand* pTenK)
 
 // Randomize the colors of all available meshes in this class
 void RandomizeColors(PTenThousand* pTenK, float customLimitMin, float customLimitMax) {
-	static std::default_random_engine e;
-	std::uniform_real_distribution<> dis(customLimitMin, customLimitMax);
+	static std::random_device rd;
+	static std::mt19937 e(rd());
+	//static std::default_random_engine e;
+	std::uniform_real_distribution<float> dis(customLimitMin, customLimitMax);
 
 	if (!pTenK)
 		return;
-	for (int i = 0; i < pTenK->MeshesCount; ++i) {
+	for (unsigned int i = 0; i < pTenK->MeshesCount; ++i) {
 		if (pTenK->Meshes) {
 			pTenK->Meshes[i].GlowR = dis(e);
 			pTenK->Meshes[i].GlowG = dis(e);
@@ -146,7 +150,7 @@ void RandomizeColors(PTenThousand* pTenK, float customLimitMin, float customLimi
 void UnRandomizeColors(PTenThousand* pTenK) {
 	if (!pTenK)
 		return;
-	for (int i = 0; i < pTenK->MeshesCount; ++i) {
+	for (unsigned int i = 0; i < pTenK->MeshesCount; ++i) {
 		if (pTenK->Meshes) {
 			pTenK->Meshes[i].GlowR = 1.0f;
 			pTenK->Meshes[i].GlowG = 1.0f;
@@ -174,7 +178,7 @@ void RefreshColorsIfNeeded() {
 		if (P10000) {
 			while (P10000->MeshesCount == 0)
 				Sleep(5);
-			for (int i = 0; i < P10000->MeshesCount; ++i) {
+			for (unsigned int i = 0; i < P10000->MeshesCount; ++i) {
 				std::string name(P10000->Meshes[i].MeshInfo->MeshTarget);
 				if (colorMap.find(name) != colorMap.end()) {
 					P10000->Meshes[i].GlowR = colorMap[name]->R;
@@ -187,7 +191,7 @@ void RefreshColorsIfNeeded() {
 		if (PlSwordSheath) {
 			while (PlSwordSheath->MeshesCount == 0)
 				Sleep(5);
-			for (int i = 0; i < PlSwordSheath->MeshesCount; ++i) {
+			for (unsigned int i = 0; i < PlSwordSheath->MeshesCount; ++i) {
 				std::string name(PlSwordSheath->Meshes[i].MeshInfo->MeshTarget);
 				if (colorMap.find(name) != colorMap.end()) {
 					PlSwordSheath->Meshes[i].GlowR = colorMap[name]->R;
@@ -200,7 +204,7 @@ void RefreshColorsIfNeeded() {
 		if (PlWig) {
 			while (PlWig->MeshesCount == 0)
 				Sleep(5);
-			for (int i = 0; i < PlWig->MeshesCount; ++i) {
+			for (unsigned int i = 0; i < PlWig->MeshesCount; ++i) {
 				std::string name(PlWig->Meshes[i].MeshInfo->MeshTarget);
 				if (colorMap.find(name) != colorMap.end()) {
 					PlWig->Meshes[i].GlowR = colorMap[name]->R;
