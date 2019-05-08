@@ -129,6 +129,8 @@ void* __fastcall hkSwordSheathDestructor(void* ecx, void* edx, void* arg) {
 	return result;
 }
 
+// Class Constructor
+// This is where we hook all the constructors and destructors for example
 MgrHooks::MgrHooks()
 {
 	// PlayerClass RVA's
@@ -156,73 +158,63 @@ MgrHooks::MgrHooks()
 		// PlayerClass Constructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_PTenThousandConstructorRVA), &hkPTenThousandCtor, &opCTor) != MH_OK)
 			LogToConsole("Failed to hook PTenThousand-Constructor", ELogType::Error);
-		else
-			LogToConsole("Hooked PTenThousand-Constructor", ELogType::Hook);
 
 		// PlayerClass Destructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_PTenThousandDestructorRVA), &hkPTenThousandDestructor, &opDestructor) != MH_OK)
 			LogToConsole("Failed to hook PTenThousand-Destructor", ELogType::Error);
-		else
-			LogToConsole("Hooked PTenThousand-Destructor", ELogType::Hook);
 
 		// Wig Constructor Hook
 		if(MH_CreateHookEx((LPVOID)(BaseAddress + m_WigConstructorRVA), &hkWigCtor, &oWigConstructor) != MH_OK)
 			LogToConsole("Failed to hook Wig-Constructor", ELogType::Error);
-		else
-			LogToConsole("Hooked Wig-Constructor", ELogType::Hook);
 
 		// Wig Destructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_WigDestructorRVA), &hkWigDestructor, &oWigDestructor) != MH_OK)
 			LogToConsole("Failed to hook Wig-Destructor", ELogType::Error);
-		else
-			LogToConsole("Hooked Wig-Destructor", ELogType::Hook);
 
 		// SwordSheath Constructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_SwordSheathConstructorRVA), &hkSwordSheathCtor, &oSwordSheathConstructor) != MH_OK)
 			LogToConsole("Failed to hook SwordSheath-Constructor", ELogType::Error);
-		else
-			LogToConsole("Hooked SwordSheath-Constructor", ELogType::Hook);
 
 		// SwordSheath Destructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_SwordSheathDestructorRVA), &hkSwordSheathDestructor, &oSwordSheathDestructor) != MH_OK)
 			LogToConsole("Failed to hook SwordSheath-Destructor", ELogType::Error);
-		else
-			LogToConsole("Hooked SwordSheath-Destructor", ELogType::Hook);
 
 		// SamDLC PlayerClass Constructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_SamDLCConstructorRVA), &hkSamDLCCtor, &oSamDLCCtor) != MH_OK)
 			LogToConsole("Failed to hook SamDLC-Constructor", ELogType::Error);
-		else
-			LogToConsole("Hooked SamDLC-Destructor", ELogType::Hook);
 
 		// SamDLC PlayerClass Destructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_SamDLCDestructorRVA), &hkSamDLCDestructor, &oSamDLCDestructor) != MH_OK)
 			LogToConsole("Failed to hook SamDLC-Destructor", ELogType::Error);
-		else
-			LogToConsole("Hooked SamDLC-Destructor", ELogType::Hook);
 		
 		// WolfDLC PlayerClass Constructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_WolfDLCConstructorRVA), &hkWolfDLCCtor, &oWolfDLCCtor) != MH_OK)
 			LogToConsole("Failed to hook WolfDLC-Constructor", ELogType::Error);
-		else
-			LogToConsole("Hooked WolfDLC-Constructor", ELogType::Hook);
 
 		// WolfDLC PlayerClass Destructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_WolfDLCDestructorRVA), &hkWolfDLCDestructor, &oWolfDLCDestructor) != MH_OK)
 			LogToConsole("Failed to hook WolfDLC-Destructor", ELogType::Error);
-		else
-			LogToConsole("Hooked WolfDLC-Destructor", ELogType::Hook);
 
 		if (MH_QueueEnableHook(MH_ALL_HOOKS) != MH_OK)
 			LogToConsole("Failed to queue hooks!", ELogType::Error);
-		if(MH_ApplyQueued() != MH_OK)
+		if (MH_ApplyQueued() != MH_OK)
 			LogToConsole("Failed to apply queued hooks!", ELogType::Error);
+		else
+			LogToConsole("Successfully applied queued hooks!", ELogType::Hook);
 	}
 }
 
-
+// MGR Hooks Destructor
+// Unhook all the hooks from above
 MgrHooks::~MgrHooks()
 {
+	if (MH_QueueDisableHook(MH_ALL_HOOKS) != MH_OK)
+		LogToConsole("Failed to queue hooks!", ELogType::Error);
+	if (MH_ApplyQueued() != MH_OK)
+		LogToConsole("Failed to disable queued hooks!", ELogType::Error);
+	else
+		LogToConsole("Successfully unhooked constructors/destructors", ELogType::Hook);
+
 	// PlayerClass RVA's
 	m_PTenThousandConstructorRVA	= NULL;
 	m_PTenThousandDestructorRVA		= NULL;
