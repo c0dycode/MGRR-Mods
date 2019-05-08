@@ -347,18 +347,52 @@ namespace Overlay {
 					bJumpSpeedModified = true;
 				}
 			}
+#ifdef _DEBUG
+			// Simple Overlay input to dynamically hook op-codes, which use floats, for easier testing when trying to find Movementspeed
+			// Can be adapted to work with other things aswell
+			// Only one hook at a time, will automatically restore the previous one when hooking a new one
+			static uintptr_t Address = NULL;
+			static uintptr_t OldAddress = NULL;
+			static char* oldData[1] = { 0 };
+
+			ImGui::InputScalar("Address to Hook at", ImGuiDataType_U32, &Address, NULL, NULL, "%08X", ImGuiInputTextFlags_CharsHexadecimal);
+			if (ImGui::Button("Hook MovementSpeed")) {
+				if (Address)
+				{
+					if (OldAddress) {
+						DWORD old;
+						VirtualProtect((LPVOID)(OldAddress), 4, PAGE_EXECUTE_READWRITE, &old);
+						memcpy((char*)(OldAddress), oldData, 4);
+						VirtualProtect((LPVOID)(OldAddress), 4, old, &old);
+						OldAddress = NULL;
+					}
+					memcpy(oldData, (char*)(BaseAddress + Address + 2), 4);
+					DWORD old;
+					VirtualProtect((LPVOID)(BaseAddress + Address + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+					*(float**)(BaseAddress + Address + 2) = &fSprintSpeedModifier;
+					VirtualProtect((LPVOID)(BaseAddress + Address + 2), 4, old, &old);
+					OldAddress = BaseAddress + Address + 2;
+				}
+			}
 
 			// Slider to adjust Sprint Speed; not working yet
-			/*if (ImGui::SliderFloat("Sprint Speed", &fSprintSpeedModifier, 0.001f, 0.8f)) {
+			if (ImGui::SliderFloat("Sprint Speed", &fSprintSpeedModifier, 0.001000000047f, 0.8f)) {
 				if (!bSprintSpeedModified) {
 					DWORD old;
-					VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-					*(float**)(BaseAddress + 0x7DD6E7 + 2) = &fSprintSpeedModifier;
-					VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, old, &old);
+					/*		VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+							*(float**)(BaseAddress + 0x7DD6E7 + 2) = &fSprintSpeedModifier;
+							VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, old, &old);*/
+
+					// A) This is only for BladeWolf
+					// B) This "works" but the animation is choppy as hell, only for "Debug" builds atm
+					VirtualProtect((LPVOID)(BaseAddress + 0x4D378C + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+					*(float**)(BaseAddress + 0x4D378C + 2) = &fSprintSpeedModifier;
+					VirtualProtect((LPVOID)(BaseAddress + 0x4D378C + 2), 4, old, &old);
 					bSprintSpeedModified = true;
 				}
-			}*/
+			}
 			mtx.unlock();
+#endif
 		}
 
 		// Not sure if this is something that people might actually want lol
