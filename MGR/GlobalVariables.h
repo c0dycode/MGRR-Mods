@@ -25,7 +25,7 @@ extern int discoDelay;
 extern bool* gameDrawsCursor;
 
 // Different types of Log-Messages
-extern enum ELogType {
+enum ELogType {
 	Hook,
 	Info,
 	Error
