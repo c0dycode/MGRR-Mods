@@ -17,7 +17,9 @@ https://discord.gg/TRgk5tV
   * Adjusting BP (BattlePoints/Currency)
 * Log-Window
     * Dump the currently loaded character bodymesh-names
- 
+
+# Requirements 
+* Make sure you have the [vc_redist.x86](https://aka.ms/vs/16/release/vc_redist.x86.exe) for 2015/2017/2019 (the linked one is for all 3)
 
 # Usage
 Download the [Package.zip](https://github.com/c0dycode/MGRR-Mods/blob/master/Package/Package.zip).
