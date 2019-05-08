@@ -107,12 +107,11 @@ namespace AppLog {
 			ImGui::End();
 		}
 	};
+	static ExampleAppLog Log;
 
 	// Demonstrate creating a simple log window with basic filtering.
 	void ShowAppLog(bool* p_open)
 	{
-		static ExampleAppLog log;
-
 		// For the demo: add a debug button before the normal log window contents
 		// We take advantage of the fact that multiple calls to Begin()/End() are appending to the same window.
 		ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
@@ -120,23 +119,23 @@ namespace AppLog {
 		if (ImGui::SmallButton("Show Mesh Names"))
 		{
 			if (P10000 && P10000->MeshesCount > 0) {
-				for (int i = 0; i < P10000->MeshesCount; ++i) {
-					log.AddLog("[PLAYER]: %s %s", P10000->Meshes[i].MeshInfo->MeshTarget, "\n");
+				for (unsigned int i = 0; i < P10000->MeshesCount; ++i) {
+					Log.AddLog("[PLAYER]: %s %s", P10000->Meshes[i].MeshInfo->MeshTarget, "\n");
 				}
 			}
 			if (PlSwordSheath && PlSwordSheath->MeshesCount > 0) {
-				for (int i = 0; i < PlSwordSheath->MeshesCount; ++i) {
-					log.AddLog("[SHEATH]: %s %s", PlSwordSheath->Meshes[i].MeshInfo->MeshTarget, "\n");
+				for (unsigned int i = 0; i < PlSwordSheath->MeshesCount; ++i) {
+					Log.AddLog("[SHEATH]: %s %s", PlSwordSheath->Meshes[i].MeshInfo->MeshTarget, "\n");
 				}
 			}
 			if (PlWig && PlWig->MeshesCount > 0) {
-				for (int i = 0; i < PlWig->MeshesCount; ++i) {
-					log.AddLog("[HAIR/WIG]: %s %s", PlWig->Meshes[i].MeshInfo->MeshTarget, "\n");
+				for (unsigned int i = 0; i < PlWig->MeshesCount; ++i) {
+					Log.AddLog("[HAIR/WIG]: %s %s", PlWig->Meshes[i].MeshInfo->MeshTarget, "\n");
 				}
 			}
 		}
 		ImGui::End();
 
-		log.Draw("Log:", p_open);
+		Log.Draw("Log:", p_open);
 	}
 }
