@@ -1,11 +1,14 @@
 #include "Overlay.h"
 #include "LogWindow.h"
+#include "MgrHooks.h"
 #include <map>
 #include <mutex>
 
 static float fJumpHeightModifier	= 0.03f;
 static float fJumpSpeedModifier		= 0.12f;
 static float fSprintSpeedModifier	= 0.001f;
+
+int movementSpeedMultiplier	= 1;
 
 static bool bJumpSpeedModified		= false;
 static bool bJumpHeightModified		= false;
@@ -37,6 +40,25 @@ SetArmorSkin oSetArmorSkin;
 
 using SetArmorSkin2 = int(__stdcall*)();
 SetArmorSkin2 sas2;
+
+using TTestHook = void* (__thiscall*)(void* ecx);
+TTestHook otestHook;
+
+void* __fastcall hkTestHook(PTenThousand* ecx) {
+	return otestHook(ecx);
+}
+
+using TLoadTest = int(__cdecl*)(int objID);
+TLoadTest oLoadTest;
+
+// Test to open CustomizationMenu - doesn't work
+//DWORD testHookRVA = 0x005b20f0;
+
+// Test to manually save the game
+//DWORD testHookRVA = 0x005c5960;
+
+// Refresh Raiden?
+DWORD testHookRVA = 0x007bd320;
 
 namespace Overlay {
 	const char* selectedPreset = { "" };
@@ -375,24 +397,51 @@ namespace Overlay {
 				}
 			}
 
-			// Slider to adjust Sprint Speed; not working yet
-			if (ImGui::SliderFloat("Sprint Speed", &fSprintSpeedModifier, 0.001000000047f, 0.8f)) {
-				if (!bSprintSpeedModified) {
-					DWORD old;
-					/*		VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-							*(float**)(BaseAddress + 0x7DD6E7 + 2) = &fSprintSpeedModifier;
-							VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, old, &old);*/
+			if (ImGui::Button("Testhook")) {
+				otestHook = ((TTestHook)(BaseAddress + testHookRVA));
+				//otestHook();
+			}
 
-					// A) This is only for BladeWolf
-					// B) This "works" but the animation is choppy as hell, only for "Debug" builds atm
-					VirtualProtect((LPVOID)(BaseAddress + 0x4D378C + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-					*(float**)(BaseAddress + 0x4D378C + 2) = &fSprintSpeedModifier;
-					VirtualProtect((LPVOID)(BaseAddress + 0x4D378C + 2), 4, old, &old);
-					bSprintSpeedModified = true;
+			if (P10000) {
+				if (ImGui::Button("Reload Raiden?")) {
+					otestHook = ((TTestHook)(BaseAddress + testHookRVA));
+					//otestHook(P10000);
+					P10000->Function74();
 				}
 			}
-			mtx.unlock();
+
+			static int objectID = 0;
+			static char objName[256];
+
+			// Translate the entered ID into the objects name
+			if (ImGui::InputInt("ObjectID", &objectID)) {
+				hkObjIDToName(objName, 0x10, objectID, 1);
+			}
+
+			if (ImGui::Button("LoadTest")) {
+				oLoadTest = (TLoadTest)(BaseAddress + 0x00a9eeb0);
+				oLoadTest(objectID);
+			}
+
+			// Slider to adjust Sprint Speed; not working yet
+			//if (ImGui::SliderFloat("Sprint Speed", &fSprintSpeedModifier, 0.001000000047f, 0.8f)) {
+			//	if (!bSprintSpeedModified) {
+			//		DWORD old;
+			//		/*		VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+			//				*(float**)(BaseAddress + 0x7DD6E7 + 2) = &fSprintSpeedModifier;
+			//				VirtualProtect((LPVOID)(BaseAddress + 0x7DD6E7 + 2), 4, old, &old);*/
+
+			//		// A) This is only for BladeWolf
+			//		// B) This "works" but the animation is choppy as hell, only for "Debug" builds atm
+			//		VirtualProtect((LPVOID)(BaseAddress + 0x4D378C + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+			//		*(float**)(BaseAddress + 0x4D378C + 2) = &fSprintSpeedModifier;
+			//		VirtualProtect((LPVOID)(BaseAddress + 0x4D378C + 2), 4, old, &old);
+			//		bSprintSpeedModified = true;
+			//	}
+			//}
 #endif
+			ImGui::SliderInt("Movement Speed Multiplier", &movementSpeedMultiplier, 1, 10);
+			mtx.unlock();
 		}
 
 		// Not sure if this is something that people might actually want lol
