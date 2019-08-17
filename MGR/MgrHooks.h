@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 
+BOOL __cdecl hkObjIDToName(char* szObjectName, rsize_t size, unsigned int objectID, int param_4);
+
 class MgrHooks
 {
 public:
@@ -22,4 +24,12 @@ private:
 
 	uintptr_t m_WolfDLCConstructorRVA;
 	uintptr_t m_WolfDLCDestructorRVA;
+
+	uintptr_t m_CustomizeSelMenuConstructorRVA;
+	uintptr_t m_CustomizeSelMenuDestructorRVA;
+
+	uintptr_t m_ObjReadSystemConstructorRVA;
+	uintptr_t m_ObjReadSystemDestructorRVA;
+
+	uintptr_t m_MovementSpeedModifierRVA;
 };
