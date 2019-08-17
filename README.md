@@ -12,6 +12,7 @@ https://discord.gg/TRgk5tV
 * Adjust Camera Height
 * Adjust Jump Height
 * Adjust Jump Speed
+* Adjust Movement Speed Multiplier
 * Cheat Menu with
   * Always no damage taken-Stat
   * Adjusting BP (BattlePoints/Currency)
