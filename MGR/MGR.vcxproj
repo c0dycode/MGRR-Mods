@@ -126,6 +126,8 @@
       <ConformanceMode>true</ConformanceMode>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <SupportJustMyCode>true</SupportJustMyCode>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
