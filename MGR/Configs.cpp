@@ -2,6 +2,10 @@
 
 namespace Configs {
 
+	// TODO: Might want to use "WritePrivateProfileStringA" and "GetPrivateProfileString" instead
+	// https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-writeprivateprofilestringa
+	// https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-getprivateprofilestring
+
 	// Save the current Configuration in presetName
 	void SaveRandomizer(const char* presetName, RaidenParts* partsToSave, VRGBA* colors) {
 
