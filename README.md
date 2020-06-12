@@ -1,7 +1,3 @@
-# Discord
-I've decided it might be a neat idea to have a dedicated discord server for my projects.
-https://discord.gg/TRgk5tV
-
 # Features
 * Skip the Company Logos on launch (not optional)
 * Adjust the played characters Body-Dimensions randomly
