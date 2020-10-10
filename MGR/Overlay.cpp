@@ -9,6 +9,8 @@ static float fJumpSpeedModifier		= 0.12f;
 static float fSprintSpeedModifier	= 0.001f;
 
 int movementSpeedMultiplier	= 1;
+bool bIncludePlayerDamageTakenModifier = false;
+float fDamageTakenMultiplier = 1.0f;
 
 static bool bJumpSpeedModified		= false;
 static bool bJumpHeightModified		= false;
@@ -69,7 +71,7 @@ namespace Overlay {
 
 	uint32_t LastEnemyRandomized = 0;
 
-	std::mutex mtx;
+	//std::mutex mtx;
 
 	void CreateVectOfArmor() {
 		for (auto it = ArmorToLoad.begin(); it != ArmorToLoad.end(); ++it) {
@@ -149,7 +151,7 @@ namespace Overlay {
 			vRaidenColors->A = 1.0f;
 		}
 
-		if (mtx.try_lock()) {
+		//if (mtx.try_lock()) {
 			// If Colorselection is not Disabled
 			if (iColorsChoice >= 1 && iColorsChoice < 3) {
 				ImGui::BeginGroup();
@@ -164,8 +166,8 @@ namespace Overlay {
 					ImGui::SliderInt("Delay", &discoDelay, 50, 150);
 				}
 			}
-			mtx.unlock();
-		}
+			//mtx.unlock();
+		//}
 		// Rainbow choice
 		/*if (iColorsChoice == 3 && !bIsRainbowActive) {
 			std::thread t (EnableRainbow);
@@ -295,8 +297,6 @@ namespace Overlay {
 
 		ImGui::Separator();
 
-
-
 		// Slider to adjust Camera Height
 		if (ImGui::SliderFloat("Camera Height", &fCameraHeigthOffset, 0.1f, 4.0f)) {
 			DWORD old;
@@ -305,71 +305,71 @@ namespace Overlay {
 			VirtualProtect(*(float**)(BaseAddress + 0x6C0C7E + 2), 4, old, &old);
 		}
 
-		if (mtx.try_lock()) {
+		//if (mtx.try_lock()) {
 
 			// Slider to adjust Jump Height
-			if (ImGui::SliderFloat("Jump Height", &fJumpHeightModifier, 0.03f, 0.3f)) {
-				if (!bJumpHeightModified) {
-					DWORD old;
+		if (ImGui::SliderFloat("Jump Height", &fJumpHeightModifier, 0.03f, 0.3f)) {
+			if (!bJumpHeightModified) {
+				DWORD old;
 
-					#pragma region Raiden
-					VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-					*(float**)(BaseAddress + 0x7BF8D2 + 2) = &fJumpHeightModifier;
-					VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, old, &old);
-					#pragma endregion
+				#pragma region Raiden
+				VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+				*(float**)(BaseAddress + 0x7BF8D2 + 2) = &fJumpHeightModifier;
+				VirtualProtect((LPVOID)(BaseAddress + 0x7BF8D2 + 2), 4, old, &old);
+				#pragma endregion
 
-					#pragma region Sam
-					VirtualProtect((LPVOID)(BaseAddress + 0x46A5A4 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-					*(float**)(BaseAddress + 0x46A5A4 + 2) = &fJumpHeightModifier;
-					VirtualProtect((LPVOID)(BaseAddress + 0x46A5A4 + 2), 4, old, &old);
-					#pragma endregion
+				#pragma region Sam
+				VirtualProtect((LPVOID)(BaseAddress + 0x46A5A4 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+				*(float**)(BaseAddress + 0x46A5A4 + 2) = &fJumpHeightModifier;
+				VirtualProtect((LPVOID)(BaseAddress + 0x46A5A4 + 2), 4, old, &old);
+				#pragma endregion
 
-					#pragma region BladeWolf
-					VirtualProtect((LPVOID)(BaseAddress + 0x4AC7FE + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-					*(float**)(BaseAddress + 0x4AC7FE + 2) = &fJumpHeightModifier;
-					VirtualProtect((LPVOID)(BaseAddress + 0x4AC7FE + 2), 4, old, &old);
-					#pragma endregion
+				#pragma region BladeWolf
+				VirtualProtect((LPVOID)(BaseAddress + 0x4AC7FE + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+				*(float**)(BaseAddress + 0x4AC7FE + 2) = &fJumpHeightModifier;
+				VirtualProtect((LPVOID)(BaseAddress + 0x4AC7FE + 2), 4, old, &old);
+				#pragma endregion
 
-					bJumpHeightModified = true;
-				}
+				bJumpHeightModified = true;
 			}
+		}
 
-			// Slider to adjust Jump Speed
-			if (ImGui::SliderFloat("Jump Speed", &fJumpSpeedModifier, 0.12f, 0.8f)) {
-				if (!bJumpSpeedModified) {
-					DWORD old;
+		// Slider to adjust Jump Speed
+		if (ImGui::SliderFloat("Jump Speed", &fJumpSpeedModifier, 0.12f, 0.8f)) {
+			if (!bJumpSpeedModified) {
+				DWORD old;
 
-					#pragma region Raiden
-					VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-					// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
-					if (memcmp((LPVOID)(BaseAddress + 0x7BFC51), "\x74\x5F", 2) == 0)
-						memcpy((LPVOID)(BaseAddress + 0x7BFC51), "\xEB\x5F", 2);
-					*(float**)(BaseAddress + 0x7BFCEF + 2) = &fJumpSpeedModifier;
-					VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, old, &old);
-					#pragma endregion
+				#pragma region Raiden
+				VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+				// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
+				if (memcmp((LPVOID)(BaseAddress + 0x7BFC51), "\x74\x5F", 2) == 0)
+					memcpy((LPVOID)(BaseAddress + 0x7BFC51), "\xEB\x5F", 2);
+				*(float**)(BaseAddress + 0x7BFCEF + 2) = &fJumpSpeedModifier;
+				VirtualProtect((LPVOID)(BaseAddress + 0x7BFCEF + 2), 4, old, &old);
+				#pragma endregion
 
-					#pragma region Sam
-					VirtualProtect((LPVOID)(BaseAddress + 0x46A914 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-					// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
-					if (memcmp((LPVOID)(BaseAddress + 0x46A8FD), "\x75\x15", 2) == 0)
-						memcpy((LPVOID)(BaseAddress + 0x46A8FD), "\xEB\x15", 2);
-					*(float**)(BaseAddress + 0x46A914 + 2) = &fJumpSpeedModifier;
-					VirtualProtect((LPVOID)(BaseAddress + 0x46A914 + 2), 4, old, &old);
-					#pragma endregion
+				#pragma region Sam
+				VirtualProtect((LPVOID)(BaseAddress + 0x46A914 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+				// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
+				if (memcmp((LPVOID)(BaseAddress + 0x46A8FD), "\x75\x15", 2) == 0)
+					memcpy((LPVOID)(BaseAddress + 0x46A8FD), "\xEB\x15", 2);
+				*(float**)(BaseAddress + 0x46A914 + 2) = &fJumpSpeedModifier;
+				VirtualProtect((LPVOID)(BaseAddress + 0x46A914 + 2), 4, old, &old);
+				#pragma endregion
 
-					#pragma region BladeWolf
-					VirtualProtect((LPVOID)(BaseAddress + 0x4ACA75 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
-					// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
-					if (memcmp((LPVOID)(BaseAddress + 0x4ACA4E), "\x74\x25", 2) == 0)
-						memcpy((LPVOID)(BaseAddress + 0x4ACA4E), "\xEB\x25", 2);
-					*(float**)(BaseAddress + 0x4ACA75 + 2) = &fJumpSpeedModifier;
-					VirtualProtect((LPVOID)(BaseAddress + 0x4ACA75 + 2), 4, old, &old);
-					#pragma endregion
+				#pragma region BladeWolf
+				VirtualProtect((LPVOID)(BaseAddress + 0x4ACA75 + 2), 4, PAGE_EXECUTE_READWRITE, &old);
+				// Remove check whether we are sprinting or not // without this, sprint-jump is not affected by this mod
+				if (memcmp((LPVOID)(BaseAddress + 0x4ACA4E), "\x74\x25", 2) == 0)
+					memcpy((LPVOID)(BaseAddress + 0x4ACA4E), "\xEB\x25", 2);
+				*(float**)(BaseAddress + 0x4ACA75 + 2) = &fJumpSpeedModifier;
+				VirtualProtect((LPVOID)(BaseAddress + 0x4ACA75 + 2), 4, old, &old);
+				#pragma endregion
 
-					bJumpSpeedModified = true;
-				}
+				bJumpSpeedModified = true;
 			}
-#ifdef _DEBUG
+		}
+#ifndef NDEBUG
 			// Simple Overlay input to dynamically hook op-codes, which use floats, for easier testing when trying to find Movementspeed
 			// Can be adapted to work with other things aswell
 			// Only one hook at a time, will automatically restore the previous one when hooking a new one
@@ -440,12 +440,19 @@ namespace Overlay {
 			//	}
 			//}
 #endif
-			ImGui::SliderInt("Movement Speed Multiplier", &movementSpeedMultiplier, 1, 10);
-			mtx.unlock();
-		}
+		ImGui::SliderInt("Movement Speed Multiplier", &movementSpeedMultiplier, 1, 10);
+			//mtx.unlock();
+		//}
+
+		ImGui::Separator();
+		ImGui::Text("Enemy Damage Taken Modifier");
+		ImGui::Text("Fox Blade and Zandatsu will bypass this!");
+		//ImGui::Checkbox("Include Player Damage Taken", &bIncludePlayerDamageTakenModifier);
+		ImGui::SliderFloat("Multiplier", &fDamageTakenMultiplier, 0.0f, 10.0f);
 
 		// Not sure if this is something that people might actually want lol
 		ImGui::Separator();
+
 		CheatMenu();
 		if (ImGui::Button("Cheat Menu")) {
 			ImGui::OpenPopup("Cheat Menu");
@@ -455,6 +462,19 @@ namespace Overlay {
 			bShowLogWindow ^= 1;
 			
 		}
+		/*static char luaFileName[MAX_PATH] = {0};
+		ImGui::Separator();
+		ImGui::InputText("Lua Filename", luaFileName, MAX_PATH);
+		if(ImGui::Button("Load"))
+		{
+			try
+			{
+				char pathbuffer[MAX_PATH];
+				GetCurrentDirectoryA(MAX_PATH, pathbuffer);
+				lua.safe_script_file(std::string(pathbuffer) + "\\" + std::string(luaFileName));
+			}
+			catch(...){}			
+		}*/
 		if(bShowLogWindow)
 			AppLog::ShowAppLog(&bShowLogWindow);
 	}

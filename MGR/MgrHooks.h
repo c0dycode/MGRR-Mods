@@ -32,4 +32,6 @@ private:
 	uintptr_t m_ObjReadSystemDestructorRVA;
 
 	uintptr_t m_MovementSpeedModifierRVA;
+
+	uintptr_t m_PTenThousandTakeDamageRVA;
 };
