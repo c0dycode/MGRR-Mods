@@ -2,6 +2,10 @@
 #define GLOBALVARIABLES_H
 #include "MGR.h"
 
+//#define SOL_USING_CXX_LUAJIT 1
+//#define SOL_EXCEPTIONS_SAFE_PROPAGATION 1
+//#include "sol.hpp"
+
 extern uintptr_t		BaseAddress;
 extern PTenThousand*	P10000;
 extern PTenThousand*	LastTargetedEnemy;
@@ -9,6 +13,8 @@ extern PTenThousand*	PlWig;
 extern PTenThousand*	PlSwordSheath;
 extern void*			CustomizeSelMenu;
 extern void*			ObjReadSystem;
+
+//inline sol::state lua;
 
 extern PlayerManager* PManager;
 extern VRGBA* vRaidenColors;
@@ -18,6 +24,9 @@ extern bool bShowOverlay;
 extern bool bDisableTakingDamage;
 extern bool bHaveOriginalVMT;
 extern bool bColorsNeedRefresh;
+
+//extern bool bIncludePlayerDamageTakenModifier;
+extern float fDamageTakenMultiplier;
 
 extern int currency;
 extern int movementSpeedMultiplier;

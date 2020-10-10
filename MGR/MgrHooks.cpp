@@ -3,6 +3,7 @@
 #include "MgrHooks.h"
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 #include "MinHook.h"
 #ifdef _MSC_PLATFORM_TOOLSET_v141
@@ -28,6 +29,7 @@ using TWigConstructor				= PTenThousand* (__cdecl*)(void* arg);
 using TSwordSheathConstructor		= PTenThousand* (__cdecl*)(void* arg);
 using TObjReadSystemConstructor		= void* (__fastcall*)(void* arg);
 using TCustomizeSelMenuConstructor	= void* (__cdecl*)(void* arg);
+using TPTenThousandTakeDamage		= void(__fastcall*)(PTenThousand*, void* edx, uint32_t damageToTake, uint32_t unknown);
 
 using TObjectIDToNameLogger			= BOOL(__cdecl*)(char* szObjectName, rsize_t size, unsigned int objectID, int param_4);
 
@@ -61,6 +63,8 @@ TObjReadSystemConstructor oObjReadSystemConstructor;
 TObjReadSystemDestructor oObjReadSystemDestructor;
 
 TObjectIDToNameLogger oObjectIDToNameLogger;
+
+TPTenThousandTakeDamage opTakeDamage;
 
 // Hook the PlayerClass Constructor so we always get the newest one immediately
 void* hkPTenThousandCtor(void* arg) {
@@ -192,6 +196,12 @@ void* __fastcall hkObjReadSystemDestructor(void* ecx, void* edx, void* arg) {
 	return result;
 }
 
+void __fastcall hkTakeDamage(PTenThousand* thiss, void* edx, uint32_t DamageToTake, uint32_t unknown) {	
+	DamageToTake = DamageToTake * fDamageTakenMultiplier;
+	
+	return opTakeDamage(thiss, edx, DamageToTake, unknown);
+}
+
 void SimpleLog(float x, float y, float z) {
 	std::stringstream sstream;
 
@@ -226,12 +236,21 @@ void __declspec(naked) hkMovementModifier() {
 		__asm mov _eax, eax
 		// Check if the function works on the PlayerCoordinates atm
 		if (_eax == (DWORD)P10000 && (
+			
+
 			/* Slow Walk 
 			P10000->CurrentInput == 2 ||*/  
 			/* Running */ 
 			P10000->CurrentInput == 3 && CurrentCharacter == ECharacter::Raiden || 
 			P10000->CurrentInput == 2 && CurrentCharacter == ECharacter::Sam ||
 			P10000->CurrentInput == 2 && CurrentCharacter == ECharacter::Wolf ||
+
+			// 36 == Codec Walking
+			P10000->CurrentInput == 36 && CurrentCharacter == ECharacter::Raiden ||
+
+			// 233 forced Wallrunning
+			P10000->CurrentInput == 233 && CurrentCharacter == ECharacter::Raiden ||
+
 			/* Sprinting */ 
 			P10000->CurrentInput == 71 && CurrentCharacter == ECharacter::Raiden ||
 			P10000->CurrentInput == 8 && CurrentCharacter == ECharacter::Sam ||
@@ -319,6 +338,8 @@ MgrHooks::MgrHooks()
 	m_ObjReadSystemConstructorRVA		= 0x00a9f5e0;
 	m_ObjReadSystemDestructorRVA		= 0x00a9fac0;
 
+	m_PTenThousandTakeDamageRVA			= 0x68EE30;
+
 	if (BaseAddress != NULL && MH_Initialize() == MH_ERROR_ALREADY_INITIALIZED | MH_ERROR_ALREADY_CREATED | MH_OK) {
 
 		// PlayerClass Constructor Hook
@@ -368,6 +389,10 @@ MgrHooks::MgrHooks()
 		// ObjReadSystem Destructor Hook
 		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_ObjReadSystemDestructorRVA), &hkObjReadSystemDestructor, &oObjReadSystemDestructor) != MH_OK)
 			LogToConsole("Failed to hook ObjReadSystem-Destructor", ELogType::Error);
+
+		if (MH_CreateHookEx((LPVOID)(BaseAddress + m_PTenThousandTakeDamageRVA), &hkTakeDamage, &opTakeDamage) != MH_OK) {
+			LogToConsole("Failed to hook TakeDamage", ELogType::Error);
+		}
 
 		//// CustomizeSelMenu Constructor Hook
 		//if (MH_CreateHookEx((LPVOID)(BaseAddress + m_CustomizeSelMenuConstructorRVA), &hkCustomizeSelmenuCtor, &oCustomizeSelmenuConstructor) != MH_OK)
